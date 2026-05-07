@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-telkom-red: #EE2D24;
+}
+
+@layer components {
+  .badge {
+    @apply px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border inline-flex items-center;
+  }
+  .badge-active {
+    @apply bg-green-50 text-green-600 border-green-100;
+  }
+  .badge-inactive {
+    @apply bg-red-50 text-red-600 border-red-100;
+  }
+}
