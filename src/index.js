@@ -48,6 +48,14 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
+// 404 Handler - Catch all undefined routes
+app.use((req, res) => {
+  res.status(404).render('error', { 
+    title: '404 - Tidak Ditemukan',
+    message: 'Maaf, halaman yang Anda cari tidak tersedia atau telah dipindahkan.' 
+  })
+})
+
 // Start server
 app.listen(PORT, () => {
   console.log(`[Server] Running on port ${PORT}`)

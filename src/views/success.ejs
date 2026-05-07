@@ -13,9 +13,6 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
         </svg>
       </div>
-      <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md border border-gray-50">
-        <div class="w-4 h-4 bg-green-500 rounded-full animate-ping"></div>
-      </div>
     </div>
 
     <h1 class="text-4xl font-black text-gray-900 mb-3 tracking-tight">Koneksi Berhasil!</h1>
@@ -30,11 +27,6 @@
         </div>
         <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Menyiapkan Koneksi...</span>
       </div>
-
-      <a id="manual-redirect" href="<%= redirectUrl || 'http://www.google.com' %>" 
-         class="block w-full py-4 bg-red-600 hover:bg-red-700 text-white font-black text-sm uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-red-100 transition-all transform active:scale-95">
-        Lanjutkan Sekarang
-      </a>
       
       <div class="pt-12">
         <%- include('partials/footer-logos') %>
