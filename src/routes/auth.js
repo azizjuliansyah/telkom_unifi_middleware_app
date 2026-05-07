@@ -29,6 +29,12 @@ router.get('/s/:siteId/', (req, res) => {
   res.render('login')
 })
 
+// GET /guest/success
+router.get('/success', (req, res) => {
+  const redirectUrl = req.query.url || req.cookies.portal_redirect
+  res.render('success', { redirectUrl })
+})
+
 // POST /guest/s/:siteId/login
 router.post('/s/:siteId/login', async (req, res) => {
   const { username, password } = req.body

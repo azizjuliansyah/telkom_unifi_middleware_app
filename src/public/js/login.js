@@ -44,7 +44,9 @@ document.getElementById('login-form').addEventListener('submit', async function(
         successEl.textContent = 'Akses diberikan! Mengalihkan ke internet...';
         successEl.style.display = 'block';
       }
-      setTimeout(() => { window.location.href = data.redirect }, 1500);
+      setTimeout(() => { 
+        window.location.href = `/guest/success?url=${encodeURIComponent(data.redirect)}`;
+      }, 800);
     } else {
       if (errorEl) {
         errorEl.textContent = data.message || 'Login gagal';

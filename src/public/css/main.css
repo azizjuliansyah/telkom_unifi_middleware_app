@@ -18,6 +18,7 @@
     --color-green-50: oklch(98.2% 0.018 155.826);
     --color-green-100: oklch(96.2% 0.044 156.743);
     --color-green-200: oklch(92.5% 0.084 155.995);
+    --color-green-500: oklch(72.3% 0.219 149.579);
     --color-green-600: oklch(62.7% 0.194 149.214);
     --color-indigo-100: oklch(93% 0.034 272.788);
     --color-indigo-400: oklch(67.3% 0.182 276.935);
@@ -327,6 +328,12 @@
   .table {
     display: table;
   }
+  .h-1 {
+    height: calc(var(--spacing) * 1);
+  }
+  .h-1\.5 {
+    height: calc(var(--spacing) * 1.5);
+  }
   .h-4 {
     height: calc(var(--spacing) * 4);
   }
@@ -359,6 +366,9 @@
   }
   .h-screen {
     height: 100vh;
+  }
+  .w-0 {
+    width: calc(var(--spacing) * 0);
   }
   .w-4 {
     width: calc(var(--spacing) * 4);
@@ -688,6 +698,9 @@
   .bg-green-50 {
     background-color: var(--color-green-50);
   }
+  .bg-green-500 {
+    background-color: var(--color-green-500);
+  }
   .bg-indigo-500 {
     background-color: var(--color-indigo-500);
   }
@@ -817,6 +830,9 @@
   .pt-4 {
     padding-top: calc(var(--spacing) * 4);
   }
+  .pt-12 {
+    padding-top: calc(var(--spacing) * 12);
+  }
   .pt-20 {
     padding-top: calc(var(--spacing) * 20);
   }
@@ -914,6 +930,9 @@
   }
   .text-gray-900 {
     color: var(--color-gray-900);
+  }
+  .text-green-500 {
+    color: var(--color-green-500);
   }
   .text-green-600 {
     color: var(--color-green-600);
@@ -1069,6 +1088,14 @@
   .duration-700 {
     --tw-duration: 700ms;
     transition-duration: 700ms;
+  }
+  .duration-\[3000ms\] {
+    --tw-duration: 3000ms;
+    transition-duration: 3000ms;
+  }
+  .ease-linear {
+    --tw-ease: linear;
+    transition-timing-function: linear;
   }
   .outline-none {
     --tw-outline-style: none;
@@ -1483,6 +1510,10 @@
   syntax: "*";
   inherits: false;
 }
+@property --tw-ease {
+  syntax: "*";
+  inherits: false;
+}
 @property --tw-translate-x {
   syntax: "*";
   inherits: false;
@@ -1569,6 +1600,7 @@
       --tw-backdrop-saturate: initial;
       --tw-backdrop-sepia: initial;
       --tw-duration: initial;
+      --tw-ease: initial;
       --tw-translate-x: 0;
       --tw-translate-y: 0;
       --tw-translate-z: 0;

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <%- include('partials/head') %>
+  <title>Koneksi Berhasil - Unifi Portal</title>
+</head>
+<body class="bg-gray-50 h-screen flex items-center justify-center p-6">
+  <div class="max-w-md w-full text-center">
+    <!-- Success Icon -->
+    <div class="mb-8 relative inline-block">
+      <div class="w-24 h-24 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto border-4 border-white shadow-xl">
+        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md border border-gray-50">
+        <div class="w-4 h-4 bg-green-500 rounded-full animate-ping"></div>
+      </div>
+    </div>
+
+    <h1 class="text-4xl font-black text-gray-900 mb-3 tracking-tight">Koneksi Berhasil!</h1>
+    <p class="text-gray-500 mb-10 leading-relaxed font-medium">
+      Anda sekarang terhubung ke internet. Anda akan dialihkan secara otomatis dalam beberapa detik.
+    </p>
+
+    <div class="space-y-6">
+      <div class="flex flex-col items-center space-y-2">
+        <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+          <div id="progress-bar" class="bg-green-500 h-full w-0 transition-all duration-[3000ms] ease-linear"></div>
+        </div>
+        <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Menyiapkan Koneksi...</span>
+      </div>
+
+      <a id="manual-redirect" href="<%= redirectUrl || 'http://www.google.com' %>" 
+         class="block w-full py-4 bg-red-600 hover:bg-red-700 text-white font-black text-sm uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-red-100 transition-all transform active:scale-95">
+        Lanjutkan Sekarang
+      </a>
+      
+      <div class="pt-12">
+        <%- include('partials/footer-logos') %>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const redirectUrl = "<%= redirectUrl || 'http://www.google.com' %>";
+    
+    // Animate progress bar
+    setTimeout(() => {
+      document.getElementById('progress-bar').style.width = '100%';
+    }, 100);
+
+    // Redirect after 3 seconds
+    setTimeout(() => {
+      window.location.href = redirectUrl;
+    }, 3200);
+  </script>
+</body>
+</html>
