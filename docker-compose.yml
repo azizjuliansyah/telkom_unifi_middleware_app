@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-telkom_unifi}
+      - DB_USER=${DB_USER:-telkom_unifi_user}
+      - DB_PASSWORD=${DB_PASSWORD:-telkom_unifi_user}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - ADMIN_DEFAULT_PASSWORD=${ADMIN_DEFAULT_PASSWORD:-admin123}
+      - UNIFI_URL=${UNIFI_URL}
+      - UNIFI_API_KEY=${UNIFI_API_KEY}
+      - UNIFI_SITE_ID=${UNIFI_SITE_ID}
+      - FORGOT_PASSWORD_URL=${FORGOT_PASSWORD_URL}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - telkom_network
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=${DB_NAME:-telkom_unifi}
+      - POSTGRES_USER=${DB_USER:-telkom_unifi_user}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-telkom_unifi_user}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-telkom_unifi_user} -d ${DB_NAME:-telkom_unifi}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - telkom_network
+
+networks:
+  telkom_network:
+    driver: bridge
+
+volumes:
+  pgdata:
