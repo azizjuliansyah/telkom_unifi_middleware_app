@@ -3,7 +3,7 @@ services:
     container_name: telkom_unifi_middleware_app
     build: .
     ports:
-      - "${PORT}"
+      - "${PORT}:3000"
     environment:
       - NODE_ENV=production
       - DB_HOST=db
