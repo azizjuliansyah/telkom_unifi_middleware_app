@@ -17,11 +17,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
   e.preventDefault();
 
   const btn = document.getElementById('submit-btn');
-  const errorEl = document.getElementById('error-msg');
-  const successEl = document.getElementById('success-msg');
 
-  if (errorEl) errorEl.style.display = 'none';
-  if (successEl) successEl.style.display = 'none';
   
   btn.disabled = true;
   btn.textContent = 'Memverifikasi...';
@@ -40,26 +36,17 @@ document.getElementById('login-form').addEventListener('submit', async function(
     const data = await res.json();
 
     if (data.success) {
-      if (successEl) {
-        successEl.textContent = 'Akses diberikan! Mengalihkan ke internet...';
-        successEl.style.display = 'block';
-      }
+      showToast('Akses diberikan! Mengalihkan...', 'success');
       setTimeout(() => { 
         window.location.href = `/guest/success?url=${encodeURIComponent(data.redirect)}`;
       }, 800);
     } else {
-      if (errorEl) {
-        errorEl.textContent = data.message || 'Login gagal';
-        errorEl.style.display = 'block';
-      }
+      showToast(data.message || 'Login gagal', 'error');
       btn.disabled = false;
       btn.textContent = 'Masuk';
     }
   } catch (err) {
-    if (errorEl) {
-      errorEl.textContent = 'Terjadi kesalahan koneksi, coba lagi';
-      errorEl.style.display = 'block';
-    }
+    showToast('Terjadi kesalahan koneksi, coba lagi', 'error');
     btn.disabled = false;
     btn.textContent = 'Masuk';
   }

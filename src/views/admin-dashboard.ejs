@@ -1,0 +1,157 @@
+<%- include('layouts/header', { title: 'Dashboard - Telkom Admin' }) %>
+
+  <%- include('partials/admin-header') %>
+
+  <!-- Main Content -->
+  <main class="mt-16 flex-grow max-w-container-max-width mx-auto w-full px-margin-x py-margin-y">
+    <!-- Breadcrumbs -->
+    <%- include('components/breadcrumb', {
+      items: [
+        { label: 'Dashboard', active: true }
+      ]
+    }) %>
+
+    <!-- Welcome Section -->
+    <div class="mb-stack-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-extrabold tracking-tight text-on-surface mb-1">Selamat Datang, <%= admin.username %></h1>
+        <p class="text-[15px] text-on-secondary-container font-medium">Ikhtisar sistem dan manajemen akses pengguna hari ini.</p>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-stack-sm">
+      <!-- Total Users -->
+      <%- include('components/card', {
+        className: 'relative overflow-hidden group',
+        bodyClassName: 'p-0',
+        body: `
+          <div class="p-8">
+            <div class="space-y-1">
+              <div class="flex justify-between items-center">
+                <h3 id="stat-total-users" class="text-4xl font-black text-on-surface leading-none">...</h3>
+                <span class="text-[10px] font-black text-outline uppercase tracking-widest bg-surface-container-low px-3 py-1 rounded-full border border-outline-variant">Total Users</span>
+              </div>
+              <p class="text-sm font-medium text-on-secondary-container">Local users in database</p>
+            </div>
+          </div>
+          <div class="h-1.5 w-full bg-surface-container-high relative">
+            <div class="absolute inset-y-0 left-0 bg-primary w-full opacity-20"></div>
+          </div>
+        `
+      }) %>
+
+      <!-- Active Users -->
+      <%- include('components/card', {
+        className: 'relative overflow-hidden group',
+        bodyClassName: 'p-0',
+        body: `
+          <div class="p-8">
+            <div class="space-y-1">
+              <div class="flex justify-between items-center">
+                <h3 id="stat-active-users" class="text-4xl font-black text-emerald-600 leading-none">...</h3>
+                <span class="text-[10px] font-black text-outline uppercase tracking-widest bg-surface-container-low px-3 py-1 rounded-full border border-outline-variant">Active Users</span>
+              </div>
+              <p class="text-sm font-medium text-on-secondary-container">Currently active accounts</p>
+            </div>
+          </div>
+          <div class="h-1.5 w-full bg-surface-container-high relative">
+            <div class="absolute inset-y-0 left-0 bg-emerald-500 w-full opacity-20"></div>
+          </div>
+        `
+      }) %>
+
+      <!-- Administrators -->
+      <%- include('components/card', {
+        className: 'relative overflow-hidden group',
+        bodyClassName: 'p-0',
+        body: `
+          <div class="p-8">
+            <div class="space-y-1">
+              <div class="flex justify-between items-center">
+                <h3 id="stat-admins" class="text-4xl font-black text-blue-600 leading-none">...</h3>
+                <span class="text-[10px] font-black text-outline uppercase tracking-widest bg-surface-container-low px-3 py-1 rounded-full border border-outline-variant">Administrators</span>
+              </div>
+              <p class="text-sm font-medium text-on-secondary-container">System administrators</p>
+            </div>
+          </div>
+          <div class="h-1.5 w-full bg-surface-container-high relative">
+            <div class="absolute inset-y-0 left-0 bg-blue-500 w-full opacity-20"></div>
+          </div>
+        `
+      }) %>
+    </div>
+
+    <!-- Second Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-stack-md items-start">
+      
+      <!-- Recent Users Table -->
+      <div class="lg:col-span-8">
+        <%- include('components/card', {
+          title: 'Recently Added Users',
+          icon: 'history',
+          headerAction: `
+            <a href="/admin/users" class="text-xs font-bold text-primary hover:underline flex items-center gap-1 uppercase tracking-wider">
+              View All <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          `,
+          bodyClassName: 'p-0',
+          body: `
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-surface-container-low border-b border-outline-variant">
+                    <th class="px-8 py-4 text-[10px] font-black text-outline uppercase tracking-widest">Username</th>
+                    <th class="px-8 py-4 text-[10px] font-black text-outline uppercase tracking-widest">Full Name</th>
+                    <th class="px-8 py-4 text-[10px] font-black text-outline uppercase tracking-widest">Date Created</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-users-tbody">
+                  <!-- JS Render -->
+                  <tr>
+                    <td colspan="3" class="px-8 py-12 text-center text-outline font-medium">Memuat data terbaru...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          `
+        }) %>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="lg:col-span-4 space-y-stack-md">
+        <%- include('components/card', {
+          title: 'Quick Actions',
+          icon: 'bolt',
+          bodyClassName: 'p-6',
+          body: `
+            <div class="grid grid-cols-1 gap-3">
+              <a href="/admin/users" class="flex items-center gap-4 p-4 rounded-xl border border-outline-variant hover:bg-surface-container-low hover:border-primary transition-all group">
+                <div class="w-10 h-10 bg-surface-container-high text-on-secondary-container rounded-lg flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                  <span class="material-symbols-outlined">person_add</span>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-on-surface">Manage Users</h4>
+                  <p class="text-[11px] text-outline">Tambah atau edit user portal</p>
+                </div>
+              </a>
+              
+              <a href="/admin/profile" class="flex items-center gap-4 p-4 rounded-xl border border-outline-variant hover:bg-surface-container-low hover:border-primary transition-all group">
+                <div class="w-10 h-10 bg-surface-container-high text-on-secondary-container rounded-lg flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                  <span class="material-symbols-outlined">settings</span>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-on-surface">Admin Settings</h4>
+                  <p class="text-[11px] text-outline">Ubah password & profile admin</p>
+                </div>
+              </a>
+            </div>
+          `
+        }) %>
+      </div>
+
+    </div>
+
+  </main>
+
+<%- include('layouts/footer', { extraScripts: '<script src="/js/admin-dashboard.js"></script>' }) %>

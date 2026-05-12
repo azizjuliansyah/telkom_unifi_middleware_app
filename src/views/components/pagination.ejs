@@ -1,0 +1,35 @@
+<%
+  const _className = locals.className || '';
+  const _infoId = locals.infoId || 'pagination-info';
+  const _infoText = locals.infoText || 'Showing 0 to 0 of 0 items';
+  const _prevId = locals.prevId || 'prev-page';
+  const _nextId = locals.nextId || 'next-page';
+  const _numbersId = locals.numbersId || 'page-numbers';
+%>
+<div class="px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-stack-md border-t border-outline-variant bg-surface-container-low <%= _className %>">
+  <span class="text-xs font-bold text-on-secondary-container uppercase tracking-widest" id="<%= _infoId %>">
+    <%= _infoText %>
+  </span>
+  <div class="flex items-center gap-2">
+    <%- include('button', {
+      id: _prevId,
+      icon: 'chevron_left',
+      variant: 'icon',
+      iconOnly: true,
+      className: 'w-9 h-9 !p-0 justify-center'
+    }) %>
+    
+    <div id="<%= _numbersId %>" class="flex gap-1.5">
+      <!-- Page numbers via JS -->
+    </div>
+    
+    <%- include('button', {
+      id: _nextId,
+      icon: 'chevron_right',
+      variant: 'icon',
+      iconOnly: true,
+      className: 'w-9 h-9 !p-0 justify-center'
+    }) %>
+  </div>
+</div>
+

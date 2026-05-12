@@ -1,0 +1,27 @@
+<%
+  const _className = locals.className || '';
+  const _headers = locals.headers || [];
+  const _id = locals.id || 'table-body';
+  const _body = locals.body || '';
+%>
+<div class="overflow-x-auto <%= _className %>">
+  <table class="w-full text-left border-collapse">
+    <thead>
+      <tr class="bg-surface-container-low border-b border-outline-variant">
+        <% _headers.forEach(header => { %>
+          <% if (typeof header === 'string') { %>
+            <th class="px-6 py-4 font-bold text-[11px] text-on-secondary-container uppercase tracking-[0.15em]"><%= header %></th>
+          <% } else { %>
+            <th class="px-6 py-4 font-bold text-[11px] text-on-secondary-container uppercase tracking-[0.15em] <%= header.className || '' %>">
+              <%= header.text %>
+            </th>
+          <% } %>
+        <% }); %>
+      </tr>
+    </thead>
+    <tbody id="<%= _id %>" class="divide-y divide-outline-variant">
+      <%- _body %>
+    </tbody>
+  </table>
+</div>
+

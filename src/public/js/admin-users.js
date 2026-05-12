@@ -42,28 +42,44 @@ async function loadUsers() {
     if (usersTbody) {
       data.users.forEach((user, i) => {
         const tr = document.createElement('tr');
-        const date = new Date(user.created_at).toLocaleDateString('id-ID', {
+        tr.className = 'hover:bg-surface-container-low transition-colors duration-200';
+        
+        const createdAt = new Date(user.created_at).toLocaleDateString('id-ID', {
           day: '2-digit',
           month: 'short',
           year: 'numeric'
         });
-        const statusBadge = user.is_active
-          ? '<span class="badge badge-active">Aktif</span>'
-          : '<span class="badge badge-inactive">Nonaktif</span>';
+
+        const updatedAt = new Date(user.updated_at).toLocaleDateString('id-ID', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        });
+
+        const statusHtml = user.is_active
+          ? `<div class="flex items-center gap-2 text-emerald-600 text-[11px] font-bold">
+              <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+              ACTIVE
+             </div>`
+          : `<div class="flex items-center gap-2 text-red-600 text-[11px] font-bold">
+              <span class="w-2 h-2 rounded-full bg-red-600"></span>
+              INACTIVE
+             </div>`;
         
         tr.innerHTML = `
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${i + 1}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${escapeHtml(user.username)}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${escapeHtml(user.full_name || '-')}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${statusBadge}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${date}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-            <button class="text-red-600 hover:text-red-900 mr-3" onclick="openEditModal('${user.id}', '${escapeHtml(user.username)}', '${escapeHtml(user.full_name || '')}', ${user.is_active})" title="Edit">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-            </button>
-            <button class="text-red-600 hover:text-red-900" onclick="openDeleteModal('${user.id}', '${escapeHtml(user.username)}')" title="Hapus">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-            </button>
+          <td class="px-6 py-4 text-xs font-bold text-on-secondary-container">${(currentPage - 1) * limit + i + 1}</td>
+          <td class="px-6 py-4">
+            <span class="text-sm font-bold text-on-surface">${escapeHtml(user.username)}</span>
+          </td>
+          <td class="px-6 py-4 text-sm font-medium text-on-secondary-container">${escapeHtml(user.full_name || '-')}</td>
+          <td class="px-6 py-4">${statusHtml}</td>
+          <td class="px-6 py-4 text-xs font-bold text-outline uppercase tracking-wider">${createdAt}</td>
+          <td class="px-6 py-4 text-xs font-bold text-outline uppercase tracking-wider">${updatedAt}</td>
+          <td class="px-6 py-4">
+            <div class="flex items-center">
+              <button class="material-symbols-outlined text-on-secondary-container hover:text-primary transition-colors p-1" onclick="openEditModal('${user.id}', '${escapeHtml(user.username)}', '${escapeHtml(user.full_name || '')}', ${user.is_active})" title="Edit">edit</button>
+              <button class="material-symbols-outlined text-on-secondary-container hover:text-primary transition-colors p-1" onclick="openDeleteModal('${user.id}', '${escapeHtml(user.username)}')" title="Delete">delete</button>
+            </div>
           </td>
         `;
         usersTbody.appendChild(tr);
@@ -74,7 +90,7 @@ async function loadUsers() {
 
   } catch (err) {
     console.error('Error loading users:', err);
-    if (loadingState) loadingState.textContent = 'Gagal memuat data.';
+    showToast('Gagal memuat data user', 'error');
   }
 }
 
@@ -87,7 +103,7 @@ function updatePagination(total, page, totalPages) {
   if (paginationInfo) {
     const start = total === 0 ? 0 : (page - 1) * limit + 1;
     const end = Math.min(page * limit, total);
-    paginationInfo.textContent = `Menampilkan ${start}-${end} dari ${total} data`;
+    paginationInfo.textContent = `Showing ${start} to ${end} of ${total} users`;
   }
 
   if (prevBtn) prevBtn.disabled = page <= 1;
@@ -98,10 +114,10 @@ function updatePagination(total, page, totalPages) {
     for (let i = 1; i <= totalPages; i++) {
       const btn = document.createElement('button');
       btn.textContent = i;
-      btn.className = `w-8 h-8 rounded-lg text-xs font-black transition-all ${
+      btn.className = `w-9 h-9 flex items-center justify-center rounded-lg text-xs font-bold transition-all ${
         i === page 
-          ? 'bg-red-600 text-white shadow-lg shadow-red-100' 
-          : 'text-gray-400 hover:bg-gray-100'
+          ? 'bg-primary text-white shadow-md shadow-red-100' 
+          : 'bg-white border border-outline-variant text-on-secondary-container hover:bg-surface-container-high'
       }`;
       btn.onclick = () => {
         currentPage = i;
@@ -123,16 +139,16 @@ const addUserBtn = document.getElementById('add-user-btn');
 if (addUserBtn) {
   addUserBtn.onclick = function() {
     isEditMode = false;
-    document.getElementById('modal-title').textContent = 'Tambah User';
+    document.getElementById('modal-title').textContent = 'Add New User';
     document.getElementById('user-id').value = '';
     document.getElementById('field-username').value = '';
     document.getElementById('field-fullname').value = '';
     document.getElementById('field-password').value = '';
-    document.getElementById('field-password').placeholder = 'Password';
-    document.getElementById('password-hint').style.display = 'none';
-    document.getElementById('status-group').style.display = 'none';
-    document.getElementById('modal-error').style.display = 'none';
-    document.getElementById('modal-overlay').style.display = 'flex';
+    document.getElementById('field-password').placeholder = '••••••••';
+    document.getElementById('field-password-hint').classList.add('hidden');
+    document.getElementById('field-status-group').classList.add('hidden');
+
+    document.getElementById('modal-overlay').classList.remove('hidden');
   };
 }
 
@@ -143,16 +159,16 @@ window.openEditModal = function(id, username, fullName, isActive) {
   document.getElementById('field-username').value = username;
   document.getElementById('field-fullname').value = fullName;
   document.getElementById('field-password').value = '';
-  document.getElementById('field-password').placeholder = 'Kosongkan jika tidak diubah';
-  document.getElementById('password-hint').style.display = 'block';
-  document.getElementById('status-group').style.display = 'block';
+  document.getElementById('field-password').placeholder = '••••••••';
+  document.getElementById('field-password-hint').classList.remove('hidden');
+  document.getElementById('field-status-group').classList.remove('hidden');
   document.getElementById('field-status').value = isActive ? '1' : '0';
-  document.getElementById('modal-error').style.display = 'none';
-  document.getElementById('modal-overlay').style.display = 'flex';
+
+  document.getElementById('modal-overlay').classList.remove('hidden');
 }
 
 window.closeModal = function() {
-  document.getElementById('modal-overlay').style.display = 'none';
+  document.getElementById('modal-overlay').classList.add('hidden');
 }
 
 const modalClose = document.getElementById('modal-close');
@@ -169,15 +185,12 @@ if (modalSave) {
     const password = document.getElementById('field-password').value;
     const isActive = document.getElementById('field-status').value;
 
-    const errorEl = document.getElementById('modal-error');
-    if (errorEl) errorEl.style.display = 'none';
-
-    if (!username) return showModalError('Username wajib diisi');
-    if (!isEditMode && !password) return showModalError('Password wajib diisi');
+    if (!username) return showToast('Username wajib diisi', 'error');
+    if (!isEditMode && !password) return showToast('Password wajib diisi', 'error');
 
     const saveBtn = document.getElementById('modal-save');
     saveBtn.disabled = true;
-    saveBtn.textContent = 'Menyimpan...';
+    saveBtn.textContent = 'SAVING...';
 
     try {
       const url = isEditMode ? `/admin/api/users/${id}` : '/admin/api/users';
@@ -194,27 +207,22 @@ if (modalSave) {
       const data = await res.json();
 
       if (data.success) {
+        showToast(isEditMode ? 'User berhasil diperbarui' : 'User berhasil ditambahkan', 'success');
         closeModal();
         loadUsers();
       } else {
-        showModalError(data.message || 'Terjadi kesalahan');
+        showToast(data.message || 'Terjadi kesalahan', 'error');
       }
     } catch (err) {
-      showModalError('Terjadi kesalahan koneksi');
+      showToast('Terjadi kesalahan koneksi', 'error');
     } finally {
       saveBtn.disabled = false;
-      saveBtn.textContent = 'Simpan';
+      saveBtn.textContent = 'SAVE USER';
     }
   };
 }
 
-function showModalError(msg) {
-  const el = document.getElementById('modal-error');
-  if (el) {
-    el.textContent = msg;
-    el.style.display = 'block';
-  }
-}
+
 
 window.openDeleteModal = function(id, username) {
   currentDeleteId = id;
@@ -222,23 +230,30 @@ window.openDeleteModal = function(id, username) {
   if (deleteConfirmText) {
     deleteConfirmText.textContent = `Hapus user "${username}"? Tindakan ini tidak dapat dibatalkan.`;
   }
-  document.getElementById('delete-overlay').style.display = 'flex';
+  document.getElementById('delete-overlay').classList.remove('hidden');
 }
 
 const deleteCancel = document.getElementById('delete-cancel');
 if (deleteCancel) {
   deleteCancel.onclick = function() {
-    document.getElementById('delete-overlay').style.display = 'none';
+    document.getElementById('delete-overlay').classList.add('hidden');
   };
 }
 
 const deleteConfirm = document.getElementById('delete-confirm');
 if (deleteConfirm) {
   deleteConfirm.onclick = async function() {
-    if (!currentDeleteId) return;
-    await fetch(`/admin/api/users/${currentDeleteId}`, { method: 'DELETE' });
-    document.getElementById('delete-overlay').style.display = 'none';
-    loadUsers();
+    const res = await fetch(`/admin/api/users/${currentDeleteId}`, { method: 'DELETE' });
+    const data = await res.json();
+    
+    document.getElementById('delete-overlay').classList.add('hidden');
+    
+    if (data.success) {
+      showToast('User berhasil dihapus', 'success');
+      loadUsers();
+    } else {
+      showToast(data.message || 'Gagal menghapus user', 'error');
+    }
   };
 }
 

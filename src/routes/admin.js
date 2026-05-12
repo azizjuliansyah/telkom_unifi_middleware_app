@@ -47,11 +47,39 @@ router.post('/logout', (req, res) => {
 router.use(requireAdminAuth)
 
 // Dashboard
-router.get('/', (req, res) => res.render('admin'))
-router.get('/dashboard', (req, res) => res.render('admin'))
+router.get('/', (req, res) => res.render('admin-dashboard', { path: '/admin' }))
+router.get('/dashboard', (req, res) => res.render('admin-dashboard', { path: '/admin' }))
+
+// User Management
+router.get('/users', (req, res) => res.render('admin-users', { path: '/admin/users' }))
 
 // Profile Page
-router.get('/profile', (req, res) => res.render('admin-profile'))
+router.get('/profile', (req, res) => res.render('admin-profile', { path: '/admin/profile' }))
+
+// API: dashboard stats
+router.get('/api/stats', async (req, res) => {
+  try {
+    const usersCount = await pool.query('SELECT COUNT(*) FROM local_users')
+    const activeUsersCount = await pool.query('SELECT COUNT(*) FROM local_users WHERE is_active = TRUE')
+    const adminsCount = await pool.query('SELECT COUNT(*) FROM admin_users')
+    
+    // Recent users (last 5)
+    const recentUsers = await pool.query('SELECT username, full_name, created_at FROM local_users ORDER BY created_at DESC LIMIT 5')
+
+    res.json({
+      success: true,
+      stats: {
+        totalUsers: parseInt(usersCount.rows[0].count),
+        activeUsers: parseInt(activeUsersCount.rows[0].count),
+        totalAdmins: parseInt(adminsCount.rows[0].count)
+      },
+      recentUsers: recentUsers.rows
+    })
+  } catch (err) {
+    console.error('[API] Stats Error:', err.message)
+    res.status(500).json({ success: false, message: 'Gagal mengambil statistik' })
+  }
+})
 
 // API: current admin info
 router.get('/api/me', (req, res) => {

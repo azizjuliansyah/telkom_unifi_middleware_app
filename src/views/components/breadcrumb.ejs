@@ -1,0 +1,22 @@
+<%
+  const _className = locals.className || '';
+  const _items = locals.items || [];
+%>
+<nav class="flex items-center gap-2 mb-stack-md text-[13px] text-on-secondary-container <%= _className %>">
+  <% _items.forEach((item, index) => { %>
+    <% if (item.href) { %>
+      <a class="hover:text-primary transition-colors <%= item.active ? 'text-primary font-bold' : '' %>" href="<%= item.href %>">
+        <%= item.label %>
+      </a>
+    <% } else { %>
+      <span class="<%= item.active ? 'text-primary font-bold' : '' %>">
+        <%= item.label %>
+      </span>
+    <% } %>
+    
+    <% if (index < _items.length - 1) { %>
+      <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    <% } %>
+  <% }); %>
+</nav>
+

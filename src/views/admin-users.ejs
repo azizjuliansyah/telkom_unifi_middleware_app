@@ -1,0 +1,206 @@
+<%- include('layouts/header', { title: 'User Management - Telkom Admin' }) %>
+
+  <%- include('partials/admin-header') %>
+
+  <!-- Main Content -->
+  <main class="mt-16 flex-grow max-w-container-max-width mx-auto w-full px-margin-x py-margin-y flex flex-col">
+    <!-- Breadcrumbs -->
+    <%- include('components/breadcrumb', {
+      items: [
+        { label: 'Dashboard', href: '/admin' },
+        { label: 'User Management', active: true }
+      ]
+    }) %>
+
+
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-stack-md mb-stack-sm">
+      <div>
+        <h1 class="text-3xl font-extrabold tracking-tight text-on-surface mb-1">User Management</h1>
+        <p class="text-[15px] text-on-secondary-container font-medium">Administer access controls and user credentials across the infrastructure.</p>
+      </div>
+      <%- include('components/button', {
+        id: 'add-user-btn',
+        text: 'ADD NEW USER',
+        icon: 'person_add',
+        variant: 'primary'
+      }) %>
+
+    </div>
+
+    <!-- Action Bar -->
+    <div class="bg-white border border-outline-variant p-stack-md flex flex-col md:flex-row gap-stack-md items-center justify-between rounded-t-2xl shadow-sm">
+      <%- include('components/input', {
+        id: 'search-input',
+        type: 'text',
+        placeholder: 'Search by name, username, or role...',
+        icon: 'search',
+        containerClass: 'w-full md:w-96'
+      }) %>
+
+    </div>
+
+    <div class="bg-white border border-outline-variant border-t-0 rounded-b-2xl shadow-sm overflow-hidden flex-grow flex flex-col min-h-[500px]">
+      <%- include('components/table', {
+        id: 'users-tbody',
+        className: 'flex-grow',
+        headers: [
+          'No', 'Username', 'Full Name', 'Status', 'Created At', 'Updated At','Actions'
+        ],
+        body: `
+          <!-- Content via JS -->
+        `
+      }) %>
+
+      <!-- States -->
+      <%- include('components/states', {
+        type: 'loading',
+        id: 'loading-state',
+        text: 'Memuat data user...'
+      }) %>
+
+      <%- include('components/states', {
+        type: 'empty',
+        id: 'empty-state',
+        icon: 'person_off',
+        title: 'Belum ada user',
+        subtext: 'Mulai dengan menambahkan user lokal yang dapat mengakses portal tanpa API eksternal.'
+      }) %>
+
+      <%- include('components/pagination', {
+        infoId: 'pagination-info',
+        infoText: 'Showing 0 to 0 of 0 users',
+        prevId: 'prev-page',
+        nextId: 'next-page',
+        numbersId: 'page-numbers'
+      }) %>
+    </div>
+
+  </main>
+
+  <!-- User Modal -->
+  <% 
+    // Helper to render input without nested include tags
+    const renderInput = (args) => {
+      const { id, label, icon, type, placeholder, required, className, hint, showPasswordToggle } = args;
+      return `
+        <div class="space-y-1.5 ${className || ''}">
+          ${label ? `<label for="${id}" class="block text-xs font-bold text-on-secondary-container uppercase tracking-widest">${label}</label>` : ''}
+          <div class="relative group">
+            ${icon ? `<span class="material-symbols-outlined absolute left-4 top-0 bottom-0 flex items-center text-on-secondary-container text-xl leading-none transition-colors group-focus-within:text-primary">${icon}</span>` : ''}
+            <input 
+              id="${id}" 
+              type="${type || 'text'}" 
+              placeholder="${placeholder || ''}"
+              class="w-full bg-surface-container-low border border-outline-variant rounded-xl ${icon ? 'pl-12' : 'px-4'} ${ (type === 'password' && showPasswordToggle) ? 'pr-11' : 'pr-4' } py-3.5 text-sm text-on-surface placeholder:text-outline focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all outline-none"
+              ${required ? 'required' : ''}
+            >
+            ${ (type === 'password' && showPasswordToggle) ? `
+              <button type="button" 
+                class="absolute right-4 top-0 bottom-0 flex items-center text-on-secondary-container hover:text-primary transition-colors outline-none"
+                onclick="const input = document.getElementById('${id}'); const icon = this.querySelector('span'); if (input.type === 'password') { input.type = 'text'; icon.textContent = 'visibility_off'; } else { input.type = 'password'; icon.textContent = 'visibility'; }">
+                <span class="material-symbols-outlined text-lg">visibility</span>
+              </button>
+            ` : '' }
+          </div>
+          ${hint ? `<p id="${id}-hint" class="text-[10px] text-outline font-medium px-1 leading-relaxed">${hint}</p>` : ''}
+        </div>
+      `;
+    };
+
+    const renderSelect = (args) => {
+      const { id, label, options, containerClass } = args;
+      return `
+        <div id="${id}-group" class="space-y-1.5 ${containerClass || ''}">
+          ${label ? `<label for="${id}" class="block text-xs font-bold text-on-secondary-container uppercase tracking-widest">${label}</label>` : ''}
+          <select id="${id}" class="w-full bg-surface-container-low border border-outline-variant rounded-xl px-4 py-3.5 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all outline-none appearance-none">
+            ${options.map(opt => `<option value="${opt.value}">${opt.text}</option>`).join('')}
+          </select>
+        </div>
+      `;
+    };
+
+    const modalBody = `
+      <input type="hidden" id="user-id">
+      <div class="space-y-6">
+        ${renderInput({
+          id: 'field-username',
+          label: 'Username',
+          icon: 'person',
+          placeholder: 'cth: budi_unifi',
+          required: true
+        })}
+        ${renderInput({
+          id: 'field-fullname',
+          label: 'Full Name',
+          icon: 'badge',
+          placeholder: 'cth: Budi Setiawan'
+        })}
+        ${renderInput({
+          id: 'field-password',
+          type: 'password',
+          label: 'Password',
+          icon: 'lock',
+          placeholder: '••••••••',
+          required: true,
+          showPasswordToggle: true,
+          hint: 'Kosongkan jika tidak ingin mengubah password'
+        })}
+        ${renderSelect({
+          id: 'field-status',
+          label: 'Status',
+          containerClass: 'hidden',
+          options: [
+            { value: '1', text: 'Aktif' },
+            { value: '0', text: 'Nonaktif' }
+          ]
+        })}
+      </div>
+
+    `;
+
+    const modalFooter = `
+      <button id="modal-cancel" type="button" class="px-6 py-3 rounded-xl text-sm font-bold text-on-secondary-container hover:bg-surface-container-high transition-all uppercase tracking-wider">CANCEL</button>
+      <button id="modal-save" type="button" class="bg-primary text-white px-10 py-3 rounded-xl text-sm font-bold shadow-lg shadow-red-100 hover:opacity-90 active:scale-95 transition-all uppercase tracking-wider">SAVE USER</button>
+    `;
+  %>
+
+
+  <%- include('components/modal', {
+    id: 'modal',
+    title: 'Add New User',
+    size: 'lg',
+    body: modalBody,
+    footer: modalFooter
+  }) %>
+
+
+
+  <!-- Delete Modal -->
+  <% 
+    const deleteFooter = `
+      <button id="delete-cancel" type="button" class="flex-1 px-6 py-3 rounded-xl text-sm font-bold text-on-secondary-container hover:bg-surface-container-high transition-all uppercase tracking-wider">CANCEL</button>
+      <button id="delete-confirm" type="button" class="flex-1 bg-primary text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg shadow-red-100 hover:opacity-90 active:scale-95 transition-all uppercase tracking-wider">DELETE</button>
+    `;
+  %>
+
+
+  <%- include('components/modal', {
+    id: 'delete',
+    title: 'Delete User?',
+    size: 'sm',
+    body: `
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-12 h-12 bg-red-50 text-primary rounded-full flex items-center justify-center border border-red-100">
+          <span class="material-symbols-outlined text-2xl">delete_forever</span>
+        </div>
+        <div class="pt-1">
+          <p id="delete-confirm-text" class="text-on-secondary-container text-sm font-medium leading-relaxed">Apakah Anda yakin ingin menghapus user ini secara permanen?</p>
+        </div>
+      </div>
+    `,
+    footer: deleteFooter
+  }) %>
+
+<%- include('layouts/footer', { extraScripts: '<script src="/js/admin-users.js"></script>' }) %>
+

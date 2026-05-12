@@ -2,9 +2,9 @@ document.getElementById('login-form').addEventListener('submit', async function(
   e.preventDefault();
 
   const btn = document.getElementById('submit-btn');
-  const errorEl = document.getElementById('error-msg');
 
-  if (errorEl) errorEl.style.display = 'none';
+
+
   btn.disabled = true;
   btn.textContent = 'Memproses...';
 
@@ -22,18 +22,12 @@ document.getElementById('login-form').addEventListener('submit', async function(
     if (data.success) {
       window.location.href = '/admin';
     } else {
-      if (errorEl) {
-        errorEl.textContent = data.message || 'Login gagal';
-        errorEl.style.display = 'block';
-      }
+      showToast(data.message || 'Login gagal', 'error');
       btn.disabled = false;
       btn.textContent = 'Login';
     }
   } catch (err) {
-    if (errorEl) {
-      errorEl.textContent = 'Terjadi kesalahan koneksi, coba lagi';
-      errorEl.style.display = 'block';
-    }
+    showToast('Terjadi kesalahan koneksi, coba lagi', 'error');
     btn.disabled = false;
     btn.textContent = 'Login';
   }

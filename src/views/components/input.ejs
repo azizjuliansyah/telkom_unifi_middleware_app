@@ -1,0 +1,50 @@
+<%
+  const _containerClass = locals.containerClass || '';
+  const _label = locals.label || '';
+  const _required = locals.required || false;
+  const _icon = locals.icon || '';
+  const _id = locals.id || '';
+  const _type = locals.type || 'text';
+  const _value = locals.value || '';
+  const _placeholder = locals.placeholder || '';
+  const _hint = locals.hint || '';
+  const _className = locals.className || '';
+  const _disabled = locals.disabled || false;
+  const _showPasswordToggle = locals.showPasswordToggle || false;
+%>
+<div class="space-y-1.5 <%= _containerClass %>">
+  <% if (_label) { %>
+    <label class="block text-[11px] font-bold text-on-secondary-container uppercase tracking-widest ml-1">
+      <%= _label %> <%= _required ? '*' : '' %>
+    </label>
+  <% } %>
+  <div class="relative group">
+    <% if (_icon) { %>
+      <span class="material-symbols-outlined absolute left-3.5 top-0 bottom-0 flex items-center text-on-secondary-container text-lg leading-none transition-colors group-focus-within:text-primary">
+        <%= _icon %>
+      </span>
+    <% } %>
+    <input 
+      id="<%= _id %>" 
+      type="<%= _type %>" 
+      value="<%= _value %>"
+      placeholder="<%= _placeholder %>"
+      class="w-full <%= _icon ? 'pl-11' : 'px-4' %> <%= (_type === 'password' && _showPasswordToggle) ? 'pr-11' : 'pr-4' %> py-3 border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-sm font-medium bg-surface-container-low transition-all disabled:opacity-50 disabled:cursor-not-allowed <%= _className %>"
+      <%= _disabled ? 'disabled' : '' %>
+      <%= _required ? 'required' : '' %>
+    >
+    <% if (_type === 'password' && _showPasswordToggle) { %>
+      <button type="button" 
+        class="absolute right-3.5 top-0 bottom-0 flex items-center text-on-secondary-container hover:text-primary transition-colors outline-none"
+        onclick="const input = document.getElementById('<%= _id %>'); const icon = this.querySelector('span'); if (input.type === 'password') { input.type = 'text'; icon.textContent = 'visibility_off'; } else { input.type = 'password'; icon.textContent = 'visibility'; }">
+        <span class="material-symbols-outlined text-lg">visibility</span>
+      </button>
+    <% } %>
+  </div>
+  <% if (_hint) { %>
+    <p id="<%= _id %>-hint" class="text-[11px] text-on-secondary-container mt-2 italic font-medium ml-1">
+      <%= _hint %>
+    </p>
+  <% } %>
+</div>
+

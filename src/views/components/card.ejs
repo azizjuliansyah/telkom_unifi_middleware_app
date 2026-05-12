@@ -1,0 +1,28 @@
+<%
+  const _className = locals.className || '';
+  const _title = locals.title || '';
+  const _icon = locals.icon || '';
+  const _headerClassName = locals.headerClassName || '';
+  const _headerAction = locals.headerAction || '';
+  const _bodyClassName = locals.bodyClassName || 'p-8';
+  const _body = locals.body || '';
+%>
+<div class="bg-white border border-outline-variant rounded-2xl shadow-sm overflow-hidden <%= _className %>">
+  <% if (_title || _icon) { %>
+    <div class="px-6 py-5 border-b border-outline-variant flex justify-between items-center bg-surface-container-low <%= _headerClassName %>">
+      <h3 class="text-lg font-bold text-on-surface flex items-center gap-3">
+        <% if (_icon) { %>
+          <span class="material-symbols-outlined text-primary"><%= _icon %></span>
+        <% } %>
+        <%= _title %>
+      </h3>
+      <% if (_headerAction) { %>
+        <%- _headerAction %>
+      <% } %>
+    </div>
+  <% } %>
+  <div class="<%= _bodyClassName %>">
+    <%- _body %>
+  </div>
+</div>
+

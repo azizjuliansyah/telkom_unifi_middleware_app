@@ -3,30 +3,33 @@ document.getElementById('profile-form').onsubmit = async function(e) {
 
   const newPassword = document.getElementById('new-password').value;
   const confirmPassword = document.getElementById('confirm-password').value;
-  const messageEl = document.getElementById('form-message');
+
   const btn = document.getElementById('save-profile-btn');
 
-  // Reset message
-  messageEl.classList.add('hidden');
-  messageEl.classList.remove('bg-green-50', 'text-green-600', 'bg-red-50', 'text-red-600');
-
   if (!newPassword) {
-    showMessage('Password baru wajib diisi', 'error');
+    showToast('Please enter a new password', 'error');
     return;
   }
 
   if (newPassword !== confirmPassword) {
-    showMessage('Konfirmasi password tidak cocok', 'error');
+    showToast('Passwords do not match', 'error');
     return;
   }
 
   if (newPassword.length < 6) {
-    showMessage('Password minimal 6 karakter', 'error');
+    showToast('Password must be at least 6 characters', 'error');
     return;
   }
 
   btn.disabled = true;
-  btn.textContent = 'Menyimpan...';
+  const originalHtml = btn.innerHTML;
+  btn.innerHTML = `
+    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    SAVING...
+  `;
 
   try {
     const res = await fetch('/admin/api/profile', {
@@ -37,27 +40,43 @@ document.getElementById('profile-form').onsubmit = async function(e) {
     const data = await res.json();
 
     if (data.success) {
-      showMessage('Password berhasil diperbarui!', 'success');
+      showToast('Password updated successfully!', 'success');
       document.getElementById('new-password').value = '';
       document.getElementById('confirm-password').value = '';
     } else {
-      showMessage(data.message || 'Terjadi kesalahan', 'error');
+      showToast(data.message || 'An error occurred', 'error');
     }
   } catch (err) {
-    showMessage('Terjadi kesalahan koneksi', 'error');
+    showToast('Connection error', 'error');
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Simpan Perubahan';
+    btn.innerHTML = originalHtml;
   }
 };
 
-function showMessage(msg, type) {
-  const messageEl = document.getElementById('form-message');
-  messageEl.textContent = msg;
-  messageEl.classList.remove('hidden');
-  if (type === 'success') {
-    messageEl.classList.add('bg-green-50', 'text-green-600', 'border', 'border-green-100');
-  } else {
-    messageEl.classList.add('bg-red-50', 'text-red-600', 'border', 'border-red-100');
-  }
+// Dropdown User Menu
+const userMenuBtn = document.getElementById('user-menu-btn');
+const userDropdown = document.getElementById('user-dropdown');
+const userMenuContainer = document.getElementById('user-menu-container');
+
+if (userMenuBtn && userDropdown) {
+  userMenuBtn.onclick = function(e) {
+    e.stopPropagation();
+    userDropdown.classList.toggle('hidden');
+  };
+
+  document.addEventListener('click', function(e) {
+    if (userMenuContainer && !userMenuContainer.contains(e.target)) {
+      userDropdown.classList.add('hidden');
+    }
+  });
+}
+
+// Logout via header
+const logoutBtnHeader = document.getElementById('logout-btn-header');
+if (logoutBtnHeader) {
+  logoutBtnHeader.onclick = async function() {
+    await fetch('/admin/logout', { method: 'POST' });
+    window.location.href = '/admin/login';
+  };
 }

@@ -1,60 +1,11 @@
-<header class="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-8 sticky top-0 z-50">
-  <!-- Left: Logo & Nav -->
-  <div class="flex items-center space-x-10">
-    <div class="flex items-center space-x-3">
-      <div class="bg-red-600 p-1.5 rounded-lg text-white shadow-lg shadow-red-100">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
-        </svg>
-      </div>
-      <span class="text-lg font-black tracking-tighter text-gray-900 uppercase">Portal Admin</span>
-    </div>
+<% 
+    const currentPath = locals.path || '';
+%>
+<%- include('../components/topbar', { 
+    admin: admin,
+    navItems: [
+        { label: 'Dashboard', href: '/admin', active: currentPath === '/admin' },
+        { label: 'Users', href: '/admin/users', active: currentPath === '/admin/users' },
+    ]
+}) %>
 
-    <nav class="hidden md:flex items-center space-x-1">
-      <a href="/admin" class="px-4 py-2 text-red-600 bg-red-50 rounded-xl text-xs font-black uppercase tracking-widest transition-all">
-        Local Users
-      </a>
-      <!-- Add more nav items here if needed -->
-    </nav>
-  </div>
-
-  <!-- Right: User Profile Dropdown -->
-  <div class="relative" id="user-menu-container">
-    <button id="user-menu-btn" class="flex items-center space-x-3 p-1.5 pl-3 rounded-full hover:bg-gray-50 transition-all border border-transparent hover:border-gray-100 group">
-      <div class="text-right hidden sm:block">
-        <p class="text-xs font-black text-gray-900 leading-none mb-0.5" id="admin-display-name"><%= admin.username %></p>
-        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none">Super Administrator</p>
-      </div>
-      <div class="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-red-600 font-black border border-gray-100 group-hover:bg-red-600 group-hover:text-white transition-all shadow-inner uppercase">
-        <%= admin.initials %>
-      </div>
-      <svg class="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-      </svg>
-    </button>
-
-    <!-- Dropdown Menu -->
-    <div id="user-dropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl shadow-gray-200/50 border border-gray-100 py-2 hidden animate-in fade-in slide-in-from-top-2 duration-200">
-      <div class="px-4 py-3 border-b border-gray-50 mb-1">
-        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">Signed in as</p>
-        <p class="text-sm font-black text-gray-900 truncate" id="admin-dropdown-username"><%= admin.username %></p>
-      </div>
-      
-      <a href="/admin/profile" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-600 hover:bg-gray-50 transition-colors font-medium">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-        </svg>
-        <span>Profile Saya</span>
-      </a>
-
-      <div class="h-px bg-gray-50 my-1"></div>
-
-      <button id="logout-btn-header" class="w-full flex items-center space-x-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors font-bold">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-        </svg>
-        <span>Logout</span>
-      </button>
-    </div>
-  </div>
-</header>

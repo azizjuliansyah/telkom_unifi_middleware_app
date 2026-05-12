@@ -1,0 +1,58 @@
+<%
+    const _icon = locals.icon || 'admin_panel_settings';
+    const _title = locals.title || 'Portal Admin';
+    const _navItems = locals.navItems || [];
+%>
+<header class="fixed top-0 left-0 w-full z-50 bg-white border-b border-outline-variant h-16">
+    <div class="max-w-container-max-width mx-auto h-full flex justify-between items-center px-margin-x">
+        <div class="flex items-center gap-stack-lg">
+            <a href="/admin" class="flex items-center gap-2">
+                <img src="/images/telkominfra-favicon.png" alt="Logo" class="h-8 w-auto">
+            </a>
+            <% if (_navItems.length > 0) { %>
+                <nav class="hidden md:flex gap-stack-md h-16 items-center">
+                    <% _navItems.forEach(item => { %>
+
+                        <a href="<%= item.href %>" 
+                           class="<%= item.active ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-secondary-container hover:text-primary' %> transition-colors duration-200 h-full flex items-center pt-0.5 text-sm font-medium">
+                            <%= item.label %>
+                        </a>
+                    <% }); %>
+                </nav>
+            <% } %>
+        </div>
+
+        <div class="flex items-center gap-stack-md relative" id="user-menu-container">
+            <button id="user-menu-btn" class="flex items-center gap-3 hover:bg-surface-container-low p-1.5 pr-3 rounded-full transition-all group">
+                <div class="w-9 h-9 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-sm border border-outline-variant shadow-sm uppercase">
+                    <%= admin.initials %>
+                </div>
+                <div class="text-left hidden sm:block">
+                    <p class="text-xs font-bold text-on-surface leading-none mb-1"><%= admin.username %></p>
+                    <p class="text-[10px] text-outline font-medium uppercase tracking-wider leading-none"><%= admin.role || 'Administrator' %></p>
+                </div>
+                <span class="material-symbols-outlined text-outline group-hover:text-on-surface transition-colors">expand_more</span>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div id="user-dropdown" class="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-outline-variant py-2 hidden z-50">
+                <div class="px-4 py-3 border-b border-outline-variant">
+                    <p class="text-[10px] text-outline font-bold uppercase tracking-widest">Signed in as</p>
+                    <p class="text-sm font-bold text-on-surface truncate"><%= admin.username %></p>
+                </div>
+                
+                <a href="/admin/profile" class="flex items-center gap-3 px-4 py-1 text-sm text-on-surface hover:bg-surface-container-low transition-colors font-medium">
+                    <span class="material-symbols-outlined text-lg">account_circle</span>
+                    <span>Profile Saya</span>
+                </a>
+
+                <div class="h-px bg-outline-variant"></div>
+
+                <button id="logout-btn-header" class="w-full flex items-center gap-3 px-4 py-1 text-sm text-primary hover:bg-red-50 transition-colors font-bold">
+                    <span class="material-symbols-outlined text-lg">logout</span>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+  <%- include('../partials/head') %>
+  <title><%= title || 'Telkom Admin Portal' %></title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CDN (Fallback/Dev) -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#EE2E24",
+            "surface-bright": "#F5F5F0",
+            "on-surface": "#1A1C1C",
+            "outline": "#926f6a",
+            "outline-variant": "#E0E0E0",
+            "surface-lowest": "#ffffff",
+            "surface-container-low": "#F9F9F9",
+            "surface-container-high": "#F0F0F0",
+            "on-secondary-container": "#5D5F5F",
+            "primary-container": "#FFDAD5",
+            "on-primary-container": "#410001",
+            "tertiary-fixed": "#CCE5FF",
+            "on-tertiary-fixed": "#001E31"
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          spacing: {
+            "gutter": "24px",
+            "stack-lg": "48px",
+            "stack-md": "24px",
+            "stack-sm": "12px",
+            "margin-x": "32px",
+            "margin-y": "24px",
+            "container-max-width": "1280px",
+          }
+        },
+      },
+    }
+  </script>
+  
+  <style>
+    body { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+
+  <% if (typeof extraHead !== 'undefined') { %>
+    <%- extraHead %>
+  <% } %>
+</head>
+<body class="<%= typeof bodyClass !== 'undefined' ? bodyClass : 'bg-surface-bright text-on-surface min-h-screen flex flex-col' %>">

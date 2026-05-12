@@ -1,0 +1,24 @@
+<%
+  const _type = locals.type || 'loading';
+  const _id = locals.id || 'state';
+  const _className = locals.className || '';
+  const _text = locals.text || 'Loading data...';
+  const _icon = locals.icon || 'inventory_2';
+  const _title = locals.title || 'No data found';
+  const _subtext = locals.subtext || '';
+%>
+<% if (_type === 'loading') { %>
+  <div id="<%= _id %>" class="<%= _className || 'py-24 text-center' %>">
+    <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-primary border-t-transparent mb-4"></div>
+    <p class="text-on-secondary-container text-[15px] font-semibold"><%= _text %></p>
+  </div>
+<% } else if (_type === 'empty') { %>
+  <div id="<%= _id %>" class="hidden <%= _className || 'py-24 text-center' %>">
+    <div class="bg-surface-container-low w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-outline border border-dashed border-outline-variant">
+      <span class="material-symbols-outlined text-3xl"><%= _icon %></span>
+    </div>
+    <h3 class="text-xl font-bold text-on-surface mb-2"><%= _title %></h3>
+    <p class="text-on-secondary-container text-sm max-w-xs mx-auto font-medium"><%= _subtext %></p>
+  </div>
+<% } %>
+

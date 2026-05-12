@@ -1,0 +1,31 @@
+<%
+  const _containerClass = locals.containerClass || '';
+  const _label = locals.label || '';
+  const _id = locals.id || '';
+  const _className = locals.className || '';
+  const _options = locals.options || [];
+  const _value = locals.value || '';
+%>
+<div class="space-y-1.5 <%= _containerClass %>">
+  <% if (_label) { %>
+    <label class="block text-[11px] font-bold text-on-secondary-container uppercase tracking-widest ml-1">
+      <%= _label %>
+    </label>
+  <% } %>
+  <div class="relative">
+    <select 
+      id="<%= _id %>" 
+      class="w-full px-4 py-3 border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none bg-surface-container-low text-sm font-bold appearance-none cursor-pointer <%= _className %>"
+    >
+      <% _options.forEach(option => { %>
+        <option value="<%= option.value %>" <%= _value == option.value ? 'selected' : '' %>>
+          <%= option.text %>
+        </option>
+      <% }); %>
+    </select>
+    <span class="material-symbols-outlined absolute right-4 top-0 bottom-0 flex items-center text-on-secondary-container leading-none pointer-events-none">
+      expand_more
+    </span>
+  </div>
+</div>
+
