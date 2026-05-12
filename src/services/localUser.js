@@ -25,11 +25,41 @@ async function verifyLocalUser(username, password) {
   return null
 }
 
-async function getAllUsers() {
-  const result = await query(
-    'SELECT id, username, full_name, is_active, created_at, updated_at FROM local_users ORDER BY created_at DESC'
-  )
-  return result.rows
+async function getUsers({ search = '', page = 1, limit = 10 } = {}) {
+  const offset = (page - 1) * limit
+  let whereClause = ''
+  const values = []
+
+  if (search) {
+    whereClause = 'WHERE username ILIKE $1 OR full_name ILIKE $1'
+    values.push(`%${search}%`)
+  }
+
+  const dataQuery = `
+    SELECT id, username, full_name, is_active, created_at, updated_at 
+    FROM local_users 
+    ${whereClause} 
+    ORDER BY created_at DESC 
+    LIMIT $${values.length + 1} OFFSET $${values.length + 2}
+  `
+
+  const countQuery = `SELECT COUNT(*) FROM local_users ${whereClause}`
+
+  const [dataRes, countRes] = await Promise.all([
+    query(dataQuery, [...values, limit, offset]),
+    query(countQuery, values)
+  ])
+
+  const total = parseInt(countRes.rows[0].count)
+  return {
+    users: dataRes.rows,
+    pagination: {
+      total,
+      page: parseInt(page),
+      limit: parseInt(limit),
+      totalPages: Math.ceil(total / limit)
+    }
+  }
 }
 
 async function getUserById(id) {
@@ -111,7 +141,7 @@ async function deleteUser(id) {
 
 export {
   verifyLocalUser,
-  getAllUsers,
+  getUsers,
   getUserById,
   createUser,
   updateUser,

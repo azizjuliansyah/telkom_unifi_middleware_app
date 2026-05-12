@@ -9,6 +9,10 @@ import { initDatabase } from './db/database.js'
 import logger from './middleware/logger.js'
 import authRoutes from './routes/auth.js'
 import adminRoutes from './routes/admin.js'
+import pgSession from 'connect-pg-simple'
+import { pool } from './db/database.js'
+
+const PostgresStore = pgSession(session)
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -25,10 +29,17 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(session({
+  store: new PostgresStore({
+    pool: pool,
+    tableName: 'session'
+  }),
   secret: process.env.SESSION_SECRET || 'default-secret-change-me',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 2 * 60 * 60 * 1000 }
+  cookie: { 
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 hari
+    secure: process.env.NODE_ENV === 'production'
+  }
 }))
 app.use(logger)
 app.use(express.static(join(__dirname, 'public')))

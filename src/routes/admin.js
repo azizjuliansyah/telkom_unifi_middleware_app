@@ -4,7 +4,7 @@ import { dirname, join } from 'path'
 import bcrypt from 'bcryptjs'
 import { pool } from '../db/database.js'
 import { requireAdminAuth } from '../middleware/adminAuth.js'
-import { getAllUsers, getUserById, createUser, updateUser, deleteUser } from '../services/localUser.js'
+import { getUsers, getUserById, createUser, updateUser, deleteUser } from '../services/localUser.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -50,16 +50,37 @@ router.use(requireAdminAuth)
 router.get('/', (req, res) => res.render('admin'))
 router.get('/dashboard', (req, res) => res.render('admin'))
 
+// Profile Page
+router.get('/profile', (req, res) => res.render('admin-profile'))
+
 // API: current admin info
 router.get('/api/me', (req, res) => {
   res.json({ success: true, data: { username: req.session.adminUsername } })
 })
 
-// API: get all local users
-router.get('/api/users', async (req, res) => {
+// API: update admin profile (password)
+router.put('/api/profile', async (req, res) => {
+  const { password } = req.body
+  if (!password) {
+    return res.status(400).json({ success: false, message: 'Password baru wajib diisi' })
+  }
+
   try {
-    const users = await getAllUsers()
-    res.json({ success: true, data: users })
+    const hashed = bcrypt.hashSync(password, 10)
+    await pool.query('UPDATE admin_users SET password = $1 WHERE id = $2', [hashed, req.session.adminId])
+    return res.json({ success: true, message: 'Password berhasil diperbarui' })
+  } catch (err) {
+    console.error('[API] Profile Update Error:', err.message)
+    res.status(500).json({ success: false, message: 'Gagal memperbarui profil' })
+  }
+})
+
+// API: get all local users (paginated & searchable)
+router.get('/api/users', async (req, res) => {
+  const { search, page, limit } = req.query
+  try {
+    const result = await getUsers({ search, page, limit })
+    res.json({ success: true, ...result })
   } catch (err) {
     console.error('[API] Error fetching users:', err.message)
     res.status(500).json({ success: false, message: 'Gagal mengambil data users' })

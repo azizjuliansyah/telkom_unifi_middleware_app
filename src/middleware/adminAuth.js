@@ -1,5 +1,9 @@
 function requireAdminAuth(req, res, next) {
   if (req.session && req.session.adminId) {
+    res.locals.admin = {
+      username: req.session.adminUsername,
+      initials: (req.session.adminUsername || 'A').charAt(0).toUpperCase()
+    }
     return next()
   }
   // Jika request adalah API (Accept: application/json) → return 401 JSON

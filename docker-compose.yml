@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   app:
+    container_name: telkom_unifi_middleware_app
     build: .
     ports:
       - "${PORT:-3000}:3000"
@@ -25,6 +26,7 @@ services:
       - telkom_network
 
   db:
+    container_name: telkom_unifi_middleware_db
     image: postgres:15-alpine
     environment:
       - POSTGRES_DB=${DB_NAME:-telkom_unifi}
