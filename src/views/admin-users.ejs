@@ -99,7 +99,8 @@
             ${ (type === 'password' && showPasswordToggle) ? `
               <button type="button" 
                 class="absolute right-4 top-0 bottom-0 flex items-center text-on-secondary-container hover:text-primary transition-colors outline-none"
-                onclick="const input = document.getElementById('${id}'); const icon = this.querySelector('span'); if (input.type === 'password') { input.type = 'text'; icon.textContent = 'visibility_off'; } else { input.type = 'password'; icon.textContent = 'visibility'; }">
+                data-password-toggle
+                data-target="${id}">
                 <span class="material-symbols-outlined text-lg">visibility</span>
               </button>
             ` : '' }
