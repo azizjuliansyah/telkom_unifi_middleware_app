@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\Data_Aziz\\2_Project_Web\\Projects_JavaScript\\telkom-unifi-middleware-app\\logs\\.80f6ee502c980db4369b5ce7d12a86c158a05f9e-audit.json",
+    "files": [
+        {
+            "date": 1778641840258,
+            "name": "D:\\Data_Aziz\\2_Project_Web\\Projects_JavaScript\\telkom-unifi-middleware-app\\logs\\combined-2026-05-13.log",
+            "hash": "1260e0ca5765bbc5c9e3e7826eed168c612e449579b43b6cd16c90cfe9a8ea63"
+        }
+    ],
+    "hashType": "sha256"
+}

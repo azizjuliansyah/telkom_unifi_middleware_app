@@ -15,6 +15,11 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
 })
 
+// Pool error handling (Unreachable errors)
+pool.on('error', (err) => {
+  console.error('[DB] Unexpected error on idle client', err.message)
+})
+
 async function query(text, params) {
   return pool.query(text, params)
 }

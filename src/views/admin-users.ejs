@@ -23,7 +23,8 @@
         id: 'add-user-btn',
         text: 'ADD NEW USER',
         icon: 'person_add',
-        variant: 'primary'
+        variant: 'primary',
+        size: 'sm'
       }) %>
 
     </div>
@@ -160,8 +161,18 @@
     `;
 
     const modalFooter = `
-      <button id="modal-cancel" type="button" class="px-6 py-3 rounded-xl text-sm font-bold text-on-secondary-container hover:bg-surface-container-high transition-all uppercase tracking-wider">CANCEL</button>
-      <button id="modal-save" type="button" class="bg-primary text-white px-10 py-3 rounded-xl text-sm font-bold shadow-lg shadow-red-100 hover:opacity-90 active:scale-95 transition-all uppercase tracking-wider">SAVE USER</button>
+      ${ include('components/button', {
+        id: 'modal-cancel',
+        text: 'CANCEL',
+        variant: 'secondary',
+        size: 'md'
+      }) }
+      ${ include('components/button', {
+        id: 'modal-save',
+        text: 'SAVE USER',
+        variant: 'primary',
+        size: 'md'
+      }) }
     `;
   %>
 
@@ -179,8 +190,18 @@
   <!-- Delete Modal -->
   <% 
     const deleteFooter = `
-      <button id="delete-cancel" type="button" class="flex-1 px-6 py-3 rounded-xl text-sm font-bold text-on-secondary-container hover:bg-surface-container-high transition-all uppercase tracking-wider">CANCEL</button>
-      <button id="delete-confirm" type="button" class="flex-1 bg-primary text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg shadow-red-100 hover:opacity-90 active:scale-95 transition-all uppercase tracking-wider">DELETE</button>
+      ${ include('components/button', {
+        id: 'delete-cancel',
+        text: 'CANCEL',
+        variant: 'secondary',
+        size: 'md'
+      }) }
+      ${ include('components/button', {
+        id: 'delete-confirm',
+        text: 'DELETE',
+        variant: 'primary',
+        size: 'md'
+      }) }
     `;
   %>
 

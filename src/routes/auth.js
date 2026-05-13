@@ -4,6 +4,7 @@ import { dirname, join } from 'path'
 import { verifyLocalUser } from '../services/localUser.js'
 import { verifyUser } from '../services/verifyUser.js'
 import { authorizeGuest } from '../services/unifi.js'
+import { guestLoginValidation, guestPortalValidation } from '../middleware/validation.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -16,8 +17,9 @@ router.get('/config', (req, res) => {
   })
 })
 
+
 // GET /guest/s/:siteId/
-router.get('/s/:siteId/', (req, res) => {
+router.get('/s/:siteId/', guestPortalValidation, (req, res) => {
   const mac = req.query.id
   if (!mac) {
     return res.status(400).render('error', { 
@@ -30,20 +32,17 @@ router.get('/s/:siteId/', (req, res) => {
 })
 
 // GET /guest/success
-router.get('/success', (req, res) => {
+router.get('/success', guestPortalValidation, (req, res) => {
   const redirectUrl = req.query.url || req.cookies.portal_redirect
   res.render('success', { redirectUrl })
 })
 
 // POST /guest/s/:siteId/login
-router.post('/s/:siteId/login', async (req, res) => {
+router.post('/s/:siteId/login', guestLoginValidation, async (req, res, next) => {
   const { username, password } = req.body
   const mac = req.cookies.portal_mac
   const redirectUrl = req.cookies.portal_redirect
 
-  if (!username || !password) {
-    return res.status(400).json({ success: false, message: 'Username dan password wajib diisi' })
-  }
   if (!mac) {
     return res.status(400).json({ success: false, message: 'Session expired. Silakan konek ulang ke WiFi.' })
   }
@@ -71,10 +70,8 @@ router.post('/s/:siteId/login', async (req, res) => {
     }
 
     return res.json({ success: true, redirect: redirectUrl || 'http://www.google.com' })
-
   } catch (err) {
-    console.error('[Auth] Error:', err.message)
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server. Coba lagi.' })
+    next(err)
   }
 })
 

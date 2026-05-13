@@ -5,14 +5,21 @@
 %>
 <header class="fixed top-0 left-0 w-full z-50 bg-white border-b border-outline-variant h-16">
     <div class="max-w-container-max-width mx-auto h-full flex justify-between items-center px-margin-x">
-        <div class="flex items-center gap-stack-lg">
-            <a href="/admin" class="flex items-center gap-2">
+        <div class="flex items-center gap-4 md:gap-stack-lg">
+            <!-- Mobile Menu Toggle -->
+            <% if (_navItems.length > 0) { %>
+                <button id="mobile-nav-btn" class="md:hidden flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-low transition-colors text-on-secondary-container">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            <% } %>
+
+            <a href="/admin" class="hidden md:flex items-center gap-2">
                 <img src="/images/telkominfra-favicon.png" alt="Logo" class="h-8 w-auto">
             </a>
+
             <% if (_navItems.length > 0) { %>
                 <nav class="hidden md:flex gap-stack-md h-16 items-center">
                     <% _navItems.forEach(item => { %>
-
                         <a href="<%= item.href %>" 
                            class="<%= item.active ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-secondary-container hover:text-primary' %> transition-colors duration-200 h-full flex items-center pt-0.5 text-sm font-medium">
                             <%= item.label %>
@@ -55,4 +62,101 @@
             </div>
         </div>
     </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <% if (_navItems.length > 0) { %>
+        <div id="mobile-nav-overlay" class="fixed inset-0 bg-black/60 z-[90] hidden backdrop-blur-sm transition-opacity duration-300 opacity-0 md:hidden"></div>
+        <div id="mobile-nav-menu" class="fixed left-0 top-0 w-72 h-full bg-white z-[100] transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden shadow-2xl flex flex-col">
+            <div class="p-6 border-b border-outline-variant flex items-center justify-between bg-surface-container-low">
+                <img src="/images/telkominfra-favicon.png" alt="Logo" class="h-8 w-auto">
+                <button id="mobile-nav-close" class="material-symbols-outlined text-on-secondary-container hover:text-primary transition-colors">close</button>
+            </div>
+            
+            <nav class="flex-grow p-4 space-y-2">
+                <% _navItems.forEach(item => { %>
+                    <a href="<%= item.href %>" 
+                       class="flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-bold <%= item.active ? 'bg-primary/5 text-primary' : 'text-on-secondary-container hover:bg-surface-container-low' %> transition-all">
+                        <span class="material-symbols-outlined text-xl">
+                            <%= item.label === 'Dashboard' ? 'dashboard' : (item.label === 'Users' ? 'group' : 'link') %>
+                        </span>
+                        <%= item.label %>
+                    </a>
+                <% }); %>
+            </nav>
+
+            <div class="p-4 border-t border-outline-variant bg-surface-container-low">
+                <div class="bg-white border border-outline-variant rounded-xl p-4 flex items-center gap-3 shadow-sm">
+                    <div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-black border border-outline-variant">
+                        <%= admin.initials %>
+                    </div>
+                    <div class="flex-grow min-w-0">
+                        <p class="text-xs font-black text-on-surface truncate"><%= admin.username %></p>
+                        <p class="text-[10px] text-outline font-bold truncate uppercase tracking-widest">Administrator</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+
+    <script>
+        (function() {
+            // User Menu Toggle
+            const userBtn = document.getElementById('user-menu-btn');
+            const userDropdown = document.getElementById('user-dropdown');
+            const userContainer = document.getElementById('user-menu-container');
+            
+            if (userBtn && userDropdown) {
+                userBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('hidden');
+                });
+                
+                document.addEventListener('click', (e) => {
+                    if (userContainer && !userContainer.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Mobile Nav Toggle
+            const mobileNavBtn = document.getElementById('mobile-nav-btn');
+            const mobileNavClose = document.getElementById('mobile-nav-close');
+            const mobileNavMenu = document.getElementById('mobile-nav-menu');
+            const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+            
+            if (mobileNavBtn && mobileNavMenu && mobileNavOverlay) {
+                const openMenu = () => {
+                    mobileNavOverlay.classList.remove('hidden');
+                    setTimeout(() => mobileNavOverlay.classList.replace('opacity-0', 'opacity-100'), 10);
+                    mobileNavMenu.classList.remove('-translate-x-full');
+                    document.body.style.overflow = 'hidden';
+                };
+                
+                const closeMenu = () => {
+                    mobileNavOverlay.classList.replace('opacity-100', 'opacity-0');
+                    mobileNavMenu.classList.add('-translate-x-full');
+                    document.body.style.overflow = '';
+                    setTimeout(() => mobileNavOverlay.classList.add('hidden'), 300);
+                };
+                
+                mobileNavBtn.addEventListener('click', openMenu);
+                if (mobileNavClose) mobileNavClose.addEventListener('click', closeMenu);
+                mobileNavOverlay.addEventListener('click', closeMenu);
+            }
+
+            // Logout logic
+            const logoutBtn = document.getElementById('logout-btn-header');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    try {
+                        const res = await fetch('/admin/logout', { method: 'POST' });
+                        const data = await res.json();
+                        if (data.success) window.location.href = '/admin/login';
+                    } catch (err) {
+                        console.error('Logout failed:', err);
+                    }
+                });
+            }
+        })();
+    </script>
 </header>

@@ -91,30 +91,4 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// User Menu logic (reused from admin-users.js or could be moved to a global script)
-const userMenuBtn = document.getElementById('user-menu-btn');
-const userDropdown = document.getElementById('user-dropdown');
-const userMenuContainer = document.getElementById('user-menu-container');
-
-if (userMenuBtn && userDropdown) {
-  userMenuBtn.onclick = function(e) {
-    e.stopPropagation();
-    userDropdown.classList.toggle('hidden');
-  };
-
-  document.addEventListener('click', function(e) {
-    if (userMenuContainer && !userMenuContainer.contains(e.target)) {
-      userDropdown.classList.add('hidden');
-    }
-  });
-}
-
-const logoutBtnHeader = document.getElementById('logout-btn-header');
-if (logoutBtnHeader) {
-  logoutBtnHeader.onclick = async function() {
-    await fetch('/admin/logout', { method: 'POST' });
-    window.location.href = '/admin/login';
-  };
-}
-
 init();

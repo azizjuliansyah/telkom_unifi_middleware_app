@@ -257,41 +257,6 @@ if (deleteConfirm) {
   };
 }
 
-const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
-  logoutBtn.onclick = async function() {
-    await fetch('/admin/logout', { method: 'POST' });
-    window.location.href = '/admin/login';
-  };
-}
-
-// Dropdown User Menu
-const userMenuBtn = document.getElementById('user-menu-btn');
-const userDropdown = document.getElementById('user-dropdown');
-const userMenuContainer = document.getElementById('user-menu-container');
-
-if (userMenuBtn && userDropdown) {
-  userMenuBtn.onclick = function(e) {
-    e.stopPropagation();
-    userDropdown.classList.toggle('hidden');
-  };
-
-  document.addEventListener('click', function(e) {
-    if (userMenuContainer && !userMenuContainer.contains(e.target)) {
-      userDropdown.classList.add('hidden');
-    }
-  });
-}
-
-// Logout via header
-const logoutBtnHeader = document.getElementById('logout-btn-header');
-if (logoutBtnHeader) {
-  logoutBtnHeader.onclick = async function() {
-    await fetch('/admin/logout', { method: 'POST' });
-    window.location.href = '/admin/login';
-  };
-}
-
 // Search debounce
 let searchTimeout;
 const searchInput = document.getElementById('search-input');
