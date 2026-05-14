@@ -16,6 +16,20 @@ export const validate = (req, res, next) => {
 }
 
 /**
+ * Middleware to handle validation results by rendering error page
+ */
+export const validatePage = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).render('error', {
+      title: 'Akses Tidak Valid',
+      message: errors.array()[0].msg
+    })
+  }
+  next()
+}
+
+/**
  * Admin Login Validation
  */
 export const adminLoginValidation = [
@@ -68,7 +82,7 @@ export const listUsersValidation = [
 export const guestPortalValidation = [
   query('id').optional().matches(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/).withMessage('Format MAC Address tidak valid'),
   query('url').optional().trim(),
-  validate
+  validatePage
 ]
 
 /**

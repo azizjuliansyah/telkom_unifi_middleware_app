@@ -23,9 +23,7 @@
       <%= typeof title !== 'undefined' ? title : 'Sesi Tidak Valid' %>
     </h1>
     <p class="text-gray-500 mb-10 leading-relaxed">
-      <%= message
-        || "Kami tidak dapat mengidentifikasi perangkat Anda. Silakan hubungkan kembali perangkat Anda ke jaringan WiFi untuk mengakses portal."
-        %>
+      <%= typeof message !== 'undefined' && message ? message : "Kami tidak dapat mengidentifikasi perangkat Anda. Silakan hubungkan kembali perangkat Anda ke jaringan WiFi untuk mengakses portal." %>
     </p>
 
     <div class="mt-12">

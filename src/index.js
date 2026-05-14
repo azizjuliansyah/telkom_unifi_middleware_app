@@ -34,7 +34,26 @@ const generalLimiter = rateLimit({
   limit: 100, // Limit each IP to 100 requests per windowMs
   standardHeaders: 'draft-7',
   legacyHeaders: false,
-  message: { success: false, message: 'Terlalu banyak permintaan dari IP ini, silakan coba lagi nanti.' }
+  message: { success: false, message: 'Terlalu banyak permintaan dari IP ini, silakan coba lagi nanti.' },
+  handler: (req, res, next, options) => {
+    const statusCode = options?.statusCode || 429
+    let errorMsg = 'Terlalu banyak permintaan dari IP ini, silakan coba lagi nanti.'
+    if (options?.message?.message) {
+      errorMsg = options.message.message
+    } else if (typeof options?.message === 'string') {
+      errorMsg = options.message
+    }
+    
+    const responseObj = typeof options?.message === 'object' && options?.message !== null ? options.message : { success: false, message: errorMsg }
+    
+    if ((req.headers.accept && req.headers.accept.includes('application/json')) || req.xhr || req.path.includes('/login') || req.path.includes('/config') || req.path.includes('/health') || req.path.includes('/api')) {
+      return res.status(statusCode).json(responseObj)
+    }
+    res.status(statusCode).render('error', {
+      title: 'Terlalu Banyak Permintaan',
+      message: errorMsg
+    })
+  }
 })
 
 const authLimiter = rateLimit({
@@ -42,7 +61,26 @@ const authLimiter = rateLimit({
   limit: 10, // Stricter limit for login/auth routes
   standardHeaders: 'draft-7',
   legacyHeaders: false,
-  message: { success: false, message: 'Terlalu banyak percobaan login, silakan coba lagi dalam 15 menit.' }
+  message: { success: false, message: 'Terlalu banyak percobaan login, silakan coba lagi dalam 15 menit.' },
+  handler: (req, res, next, options) => {
+    const statusCode = options?.statusCode || 429
+    let errorMsg = 'Terlalu banyak percobaan login, silakan coba lagi dalam 15 menit.'
+    if (options?.message?.message) {
+      errorMsg = options.message.message
+    } else if (typeof options?.message === 'string') {
+      errorMsg = options.message
+    }
+    
+    const responseObj = typeof options?.message === 'object' && options?.message !== null ? options.message : { success: false, message: errorMsg }
+    
+    if ((req.headers.accept && req.headers.accept.includes('application/json')) || req.xhr || req.path.includes('/login') || req.path.includes('/config') || req.path.includes('/health') || req.path.includes('/api')) {
+      return res.status(statusCode).json(responseObj)
+    }
+    res.status(statusCode).render('error', {
+      title: 'Akses Dibatasi',
+      message: errorMsg
+    })
+  }
 })
 
 // Middleware (urutan penting)
