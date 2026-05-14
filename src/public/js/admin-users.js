@@ -77,11 +77,21 @@ async function loadUsers() {
           <td class="px-6 py-4 text-xs font-bold text-outline uppercase tracking-wider">${updatedAt}</td>
           <td class="px-6 py-4">
             <div class="flex items-center">
-              <button class="material-symbols-outlined text-on-secondary-container hover:text-primary transition-colors p-1" onclick="openEditModal('${user.id}', '${escapeHtml(user.username)}', '${escapeHtml(user.full_name || '')}', ${user.is_active})" title="Edit">edit</button>
-              <button class="material-symbols-outlined text-on-secondary-container hover:text-primary transition-colors p-1" onclick="openDeleteModal('${user.id}', '${escapeHtml(user.username)}')" title="Delete">delete</button>
+              <button class="material-symbols-outlined text-on-secondary-container hover:text-primary transition-colors p-1 edit-user-btn" title="Edit">edit</button>
+              <button class="material-symbols-outlined text-on-secondary-container hover:text-primary transition-colors p-1 delete-user-btn" title="Delete">delete</button>
             </div>
           </td>
         `;
+
+        const editBtn = tr.querySelector('.edit-user-btn');
+        const deleteBtn = tr.querySelector('.delete-user-btn');
+        if (editBtn) {
+          editBtn.onclick = () => openEditModal(user.id, user.username, user.full_name || '', user.is_active);
+        }
+        if (deleteBtn) {
+          deleteBtn.onclick = () => openDeleteModal(user.id, user.username);
+        }
+
         usersTbody.appendChild(tr);
       });
     }
@@ -234,11 +244,12 @@ window.openDeleteModal = function(id, username) {
 }
 
 const deleteCancel = document.getElementById('delete-cancel');
-if (deleteCancel) {
-  deleteCancel.onclick = function() {
-    document.getElementById('delete-overlay').classList.add('hidden');
-  };
-}
+const deleteClose = document.getElementById('delete-close');
+const closeDeleteModal = function() {
+  document.getElementById('delete-overlay').classList.add('hidden');
+};
+if (deleteCancel) deleteCancel.onclick = closeDeleteModal;
+if (deleteClose) deleteClose.onclick = closeDeleteModal;
 
 const deleteConfirm = document.getElementById('delete-confirm');
 if (deleteConfirm) {

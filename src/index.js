@@ -51,6 +51,7 @@ app.use(helmet({
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
       "script-src": ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com"], // Tailwind CDN and inline scripts
+      "script-src-attr": ["'unsafe-inline'"], // Allow inline event handlers like onclick
       "img-src": ["'self'", "data:", "https://*"],
     },
   },
