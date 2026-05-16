@@ -11,7 +11,7 @@ import authRoutes from './routes/auth.js'
 import adminRoutes from './routes/admin.js'
 import pgSession from 'connect-pg-simple'
 import { pool } from './db/database.js'
-import helmet from 'helmet'
+
 
 
 const PostgresStore = pgSession(session)
@@ -30,18 +30,6 @@ await initDatabase()
 
 
 // Middleware (urutan penting)
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      "script-src": ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com"], // Tailwind CDN and inline scripts
-      "script-src-attr": ["'unsafe-inline'"], // Allow inline event handlers like onclick
-      "img-src": ["'self'", "data:", "https://*"],
-      "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      "font-src": ["'self'", "https://fonts.gstatic.com"],
-    },
-  },
-}))
 
 app.use(morgan('dev'))
 app.use(express.json())
