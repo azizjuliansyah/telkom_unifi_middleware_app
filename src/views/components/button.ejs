@@ -37,7 +37,7 @@
   <%= _disabled ? 'disabled' : '' %>
 >
   <% if (_icon) { %>
-    <span class="material-symbols-outlined text-md"><%= _icon %></span>
+    <%- include('icon', { name: _icon, className: 'w-4 h-4' }) %>
   <% } %>
   <% if (!_iconOnly && _text) { %>
     <%= _text %>

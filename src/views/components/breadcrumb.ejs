@@ -15,7 +15,7 @@
     <% } %>
     
     <% if (index < _items.length - 1) { %>
-      <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+      <%- include('icon', { name: 'chevron_right', className: 'w-4 h-4' }) %>
     <% } %>
   <% }); %>
 </nav>

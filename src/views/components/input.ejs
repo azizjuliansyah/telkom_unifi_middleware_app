@@ -20,8 +20,8 @@
   <% } %>
   <div class="relative group">
     <% if (_icon) { %>
-      <span class="material-symbols-outlined absolute left-3.5 top-0 bottom-0 flex items-center text-on-secondary-container text-lg leading-none transition-colors group-focus-within:text-primary">
-        <%= _icon %>
+      <span class="absolute left-3.5 top-0 bottom-0 flex items-center text-on-secondary-container transition-colors group-focus-within:text-primary" style="transform: translateY(-1px);">
+        <%- include('icon', { name: _icon, className: 'w-5 h-5' }) %>
       </span>
     <% } %>
     <input 
@@ -36,15 +36,23 @@
     <% if (_type === 'password' && _showPasswordToggle) { %>
       <button type="button" 
         class="absolute right-3.5 top-0 bottom-0 flex items-center text-on-secondary-container hover:text-primary transition-colors outline-none"
+        style="transform: translateY(4px);"
         data-password-toggle
         data-target="<%= _id %>">
-        <span class="material-symbols-outlined text-lg">visibility</span>
+        <span class="password-toggle-icon">
+          <span class="icon-on">
+            <%- include('icon', { name: 'visibility', className: 'w-5 h-5' }) %>
+          </span>
+          <span class="icon-off hidden">
+            <%- include('icon', { name: 'visibility_off', className: 'w-5 h-5' }) %>
+          </span>
+        </span>
       </button>
     <% } %>
   </div>
   <% if (_hint) { %>
     <p id="<%= _id %>-hint" class="text-[11px] text-on-secondary-container mt-2 italic font-medium ml-1">
-      <%= _hint %>
+      <%- _hint %>
     </p>
   <% } %>
 </div>

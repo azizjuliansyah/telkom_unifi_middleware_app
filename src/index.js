@@ -50,6 +50,8 @@ app.use(session({
 }))
 app.use(logger)
 app.use(express.static(join(__dirname, 'public')))
+app.use('/assets/material-symbols', express.static(join(__dirname, '..', 'node_modules', 'material-symbols')))
+app.use('/assets/fonts', express.static(join(__dirname, '..', 'node_modules', '@fontsource')))
 
 // View engine setup
 app.set('view engine', 'ejs')

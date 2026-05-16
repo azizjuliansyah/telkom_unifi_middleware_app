@@ -15,7 +15,7 @@
 <% } else if (_type === 'empty') { %>
   <div id="<%= _id %>" class="hidden <%= _className || 'py-24 text-center' %>">
     <div class="bg-surface-container-low w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-outline border border-dashed border-outline-variant">
-      <span class="material-symbols-outlined text-3xl"><%= _icon %></span>
+      <%- include('icon', { name: _icon, className: 'w-8 h-8' }) %>
     </div>
     <h3 class="text-xl font-bold text-on-surface mb-2"><%= _title %></h3>
     <p class="text-on-secondary-container text-sm max-w-xs mx-auto font-medium"><%= _subtext %></p>

@@ -51,47 +51,16 @@
         <form id="profile-form" class="space-y-4">
           <!-- Account Info Section -->
           <%
-            // Helper to render input without nested include tags
-            const renderInput = (args) => {
-              const { id, label, icon, type, placeholder, required, className, hint, value, disabled, showPasswordToggle } = args;
-              return `
-                <div class="space-y-1.5 ${className || ''}">
-                  ${label ? `<label for="${id}" class="block text-xs font-bold text-on-secondary-container uppercase tracking-widest">${label}</label>` : ''}
-                  <div class="relative group">
-                    ${icon ? `<span class="material-symbols-outlined absolute left-4 top-0 bottom-0 flex items-center text-on-secondary-container text-xl leading-none transition-colors group-focus-within:text-primary">${icon}</span>` : ''}
-                    <input 
-                      id="${id}" 
-                      type="${type || 'text'}" 
-                      value="${value || ''}"
-                      placeholder="${placeholder || ''}"
-                      class="w-full bg-surface-container-low border border-outline-variant rounded-xl ${icon ? 'pl-12' : 'px-4'} ${ (type === 'password' && showPasswordToggle) ? 'pr-11' : 'pr-4' } py-3.5 text-sm text-on-surface placeholder:text-outline focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-                      ${required ? 'required' : ''}
-                      ${disabled ? 'disabled' : ''}
-                    >
-                    ${ (type === 'password' && showPasswordToggle) ? `
-                      <button type="button" 
-                        class="absolute right-4 top-0 bottom-0 flex items-center text-on-secondary-container hover:text-primary transition-colors outline-none"
-                        data-password-toggle
-                        data-target="${id}">
-                        <span class="material-symbols-outlined text-lg">visibility</span>
-                      </button>
-                    ` : '' }
-                  </div>
-                  ${hint ? `<p id="${id}-hint" class="text-[10px] text-outline font-medium px-1 leading-relaxed">${hint}</p>` : ''}
-                </div>
-              `;
-            };
-
             const accountInfoBody = `
               <div class="space-y-6">
-                ${renderInput({
+                ${ include('components/input', {
                   id: 'username-display',
                   label: 'Username',
                   value: admin.username,
                   disabled: true,
                   icon: 'person',
-                  hint: '<span class="material-symbols-outlined text-[14px] align-middle mr-1">lock</span> Username cannot be changed for security reasons.'
-                })}
+                  hint: include('components/icon', { name: 'lock', className: 'w-3.5 h-3.5 inline mr-1' }) + ' Username cannot be changed for security reasons.'
+                }) }
               </div>
             `;
           %>
@@ -106,26 +75,28 @@
           <%
             const securityBody = `
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                ${renderInput({
+                ${ include('components/input', {
                   id: 'new-password',
                   type: 'password',
                   label: 'New Password',
                   icon: 'lock_open',
                   placeholder: '••••••••',
                   showPasswordToggle: true
-                })}
-                ${renderInput({
+                }) }
+                ${ include('components/input', {
                   id: 'confirm-password',
                   type: 'password',
                   label: 'Confirm Password',
                   icon: 'verified',
                   placeholder: '••••••••',
                   showPasswordToggle: true
-                })}
+                }) }
               </div>
 
               <div class="mt-6 flex items-start gap-4 p-5 bg-surface-container-low rounded-xl border border-outline-variant">
-                <span class="material-symbols-outlined text-primary">info</span>
+                <div class="text-primary">
+                  ${ include('components/icon', { name: 'info', className: 'w-5 h-5' }) }
+                </div>
                 <div>
                   <h4 class="text-sm font-bold text-on-surface mb-1">Security Tip</h4>
                   <p class="text-xs text-on-secondary-container leading-relaxed">Ensure your password is at least 8 characters long and contains a mix of letters, numbers, and symbols.</p>

@@ -9,7 +9,7 @@
             <!-- Mobile Menu Toggle -->
             <% if (_navItems.length > 0) { %>
                 <button id="mobile-nav-btn" class="md:hidden flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-low transition-colors text-on-secondary-container">
-                    <span class="material-symbols-outlined">menu</span>
+                    <%- include('icon', { name: 'menu', className: 'w-6 h-6' }) %>
                 </button>
             <% } %>
 
@@ -38,7 +38,7 @@
                     <p class="text-xs font-bold text-on-surface leading-none mb-1"><%= admin.username %></p>
                     <p class="text-[10px] text-outline font-medium uppercase tracking-wider leading-none"><%= admin.role || 'Administrator' %></p>
                 </div>
-                <span class="material-symbols-outlined text-outline group-hover:text-on-surface transition-colors">expand_more</span>
+                <%- include('icon', { name: 'expand_more', className: 'w-5 h-5 text-outline group-hover:text-on-surface transition-colors' }) %>
             </button>
 
             <!-- Dropdown Menu -->
@@ -48,15 +48,15 @@
                     <p class="text-sm font-bold text-on-surface truncate"><%= admin.username %></p>
                 </div>
                 
-                <a href="/admin/profile" class="flex items-center gap-3 px-4 py-1 text-sm text-on-surface hover:bg-surface-container-low transition-colors font-medium">
-                    <span class="material-symbols-outlined text-lg">account_circle</span>
+                <a href="/admin/profile" class="flex items-center gap-3 px-4 py-3 text-sm text-on-surface hover:bg-surface-container-low transition-colors font-medium">
+                    <%- include('icon', { name: 'account_circle', className: 'w-5 h-5' }) %>
                     <span>Profile Saya</span>
                 </a>
 
                 <div class="h-px bg-outline-variant"></div>
 
-                <button id="logout-btn-header" class="w-full flex items-center gap-3 px-4 py-1 text-sm text-primary hover:bg-red-50 transition-colors font-bold">
-                    <span class="material-symbols-outlined text-lg">logout</span>
+                <button id="logout-btn-header" class="w-full flex items-center gap-3 px-4 py-3 text-sm text-primary hover:bg-red-50 transition-colors font-bold">
+                    <%- include('icon', { name: 'logout', className: 'w-5 h-5' }) %>
                     <span>Logout</span>
                 </button>
             </div>
@@ -69,16 +69,19 @@
         <div id="mobile-nav-menu" class="fixed left-0 top-0 w-72 h-full bg-white z-[100] transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden shadow-2xl flex flex-col">
             <div class="p-6 border-b border-outline-variant flex items-center justify-between bg-surface-container-low">
                 <img src="/images/telkominfra-favicon.png" alt="Logo" class="h-8 w-auto">
-                <button id="mobile-nav-close" class="material-symbols-outlined text-on-secondary-container hover:text-primary transition-colors">close</button>
+                <button id="mobile-nav-close" class="text-on-secondary-container hover:text-primary transition-colors">
+                    <%- include('icon', { name: 'close', className: 'w-6 h-6' }) %>
+                </button>
             </div>
             
             <nav class="flex-grow p-4 space-y-2">
                 <% _navItems.forEach(item => { %>
                     <a href="<%= item.href %>" 
                        class="flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-bold <%= item.active ? 'bg-primary/5 text-primary' : 'text-on-secondary-container hover:bg-surface-container-low' %> transition-all">
-                        <span class="material-symbols-outlined text-xl">
-                            <%= item.label === 'Dashboard' ? 'dashboard' : (item.label === 'Users' ? 'group' : 'link') %>
-                        </span>
+                        <%- include('icon', { 
+                            name: item.label === 'Dashboard' ? 'dashboard' : (item.label === 'Users' ? 'group' : 'link'), 
+                            className: 'w-6 h-6' 
+                        }) %>
                         <%= item.label %>
                     </a>
                 <% }); %>

@@ -4,56 +4,114 @@
   <%- include('../partials/head') %>
   <title><%= title || 'Telkom Admin Portal' %></title>
   
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CDN (Fallback/Dev) -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#EE2E24",
-            "surface-bright": "#F5F5F0",
-            "on-surface": "#1A1C1C",
-            "outline": "#926f6a",
-            "outline-variant": "#E0E0E0",
-            "surface-lowest": "#ffffff",
-            "surface-container-low": "#F9F9F9",
-            "surface-container-high": "#F0F0F0",
-            "on-secondary-container": "#5D5F5F",
-            "primary-container": "#FFDAD5",
-            "on-primary-container": "#410001",
-            "tertiary-fixed": "#CCE5FF",
-            "on-tertiary-fixed": "#001E31"
-          },
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
-            display: ['Plus Jakarta Sans', 'sans-serif'],
-          },
-          spacing: {
-            "gutter": "24px",
-            "stack-lg": "48px",
-            "stack-md": "24px",
-            "stack-sm": "12px",
-            "margin-x": "32px",
-            "margin-y": "24px",
-            "container-max-width": "1280px",
-          }
-        },
-      },
-    }
-  </script>
-  
+  <!-- Local Assets - 100% Offline Ready -->
+  <link rel="stylesheet" href="/assets/material-symbols/outlined.css" />
+  <link rel="stylesheet" href="/assets/fonts/plus-jakarta-sans/index.css" />
+  <link rel="stylesheet" href="/assets/fonts/inter/index.css" />
+  <link rel="stylesheet" href="/css/main.css" />
+
   <style>
-    body { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    :root {
+      --primary: #EE2E24;
+      --on-surface: #1A1C1C;
+      --surface-bright: #F5F5F0;
+      --outline: #926f6a;
+      --outline-variant: #E0E0E0;
+      --surface-lowest: #ffffff;
+      --surface-container-low: #F9F9F9;
+      --surface-container-high: #F0F0F0;
+      --on-secondary-container: #5D5F5F;
+      --primary-container: #FFDAD5;
+      --on-primary-container: #410001;
+      --tertiary-fixed: #CCE5FF;
+      --on-tertiary-fixed: #001E31;
+      
+      --gutter: 24px;
+      --stack-lg: 48px;
+      --stack-md: 24px;
+      --stack-sm: 12px;
+      --margin-x: 32px;
+      --margin-y: 24px;
+    }
+
+    /* Core Utility Classes for Offline Support */
+    .bg-primary { background-color: var(--primary) !important; }
+    .text-primary { color: var(--primary) !important; }
+    .bg-surface-bright { background-color: var(--surface-bright) !important; }
+    .text-on-surface { color: var(--on-surface) !important; }
+    .text-outline { color: var(--outline) !important; }
+    .border-outline-variant { border-color: var(--outline-variant) !important; }
+    .bg-surface-container-low { background-color: var(--surface-container-low) !important; }
+    .bg-surface-container-high { background-color: var(--surface-container-high) !important; }
+    .text-on-secondary-container { color: var(--on-secondary-container) !important; }
+    
+    /* Layout Utilities */
+    .p-gutter { padding: var(--gutter); }
+    .mb-stack-lg { margin-bottom: var(--stack-lg); }
+    .mb-stack-md { margin-bottom: var(--stack-md); }
+    .mb-stack-sm { margin-bottom: var(--stack-sm); }
+    
+    .gap-stack-md { gap: var(--stack-md); }
+    .gap-stack-lg { gap: var(--stack-lg); }
+    .p-stack-md { padding: var(--stack-md); }
+    
+    /* Space-y implementation for stack-md */
+    .space-y-stack-md > :not([hidden]) ~ :not([hidden]) {
+      margin-top: var(--stack-md);
+    }
+
+    .px-margin-x { padding-left: var(--margin-x); padding-right: var(--margin-x); }
+    .py-margin-y { padding-top: var(--margin-y); padding-bottom: var(--margin-y); }
+    .max-w-container-max-width { max-width: 1280px; width: 100%; margin-left: auto; margin-right: auto; }
+
+    /* Color Utilities */
+    .bg-primary { background-color: var(--primary) !important; }
+    .text-primary { color: var(--primary) !important; }
+    .border-primary { border-color: var(--primary) !important; }
+    .bg-primary\/5 { background-color: rgba(0, 100, 148, 0.05) !important; }
+    .bg-primary\/10 { background-color: rgba(0, 100, 148, 0.1) !important; }
+
+    .bg-primary-container { background-color: var(--primary-container) !important; }
+    .text-on-primary-container { color: var(--on-primary-container) !important; }
+    
+    .bg-surface-bright { background-color: var(--surface-bright) !important; }
+    .bg-surface-container-low { background-color: var(--surface-container-low) !important; }
+    .bg-surface-container-high { background-color: var(--surface-container-high) !important; }
+    
+    .text-on-surface { color: var(--on-surface) !important; }
+    .text-on-secondary-container { color: var(--on-secondary-container) !important; }
+    .text-on-surface-variant { color: var(--on-surface-variant) !important; }
+    .text-outline { color: var(--outline) !important; }
+    
+    .border-outline-variant { border-color: var(--outline-variant) !important; }
+    .bg-outline-variant { background-color: var(--outline-variant) !important; }
+
+    /* Table Divider Utilities */
+    .table-divider tr:not(:last-child) {
+      border-bottom: 1px solid var(--outline-variant) !important;
+    }
+    .divide-y > :not([hidden]) ~ :not([hidden]) {
+      border-top-width: 1px;
+      border-bottom-width: 0px;
+    }
+    .divide-outline-variant > :not([hidden]) ~ :not([hidden]) {
+      border-color: var(--outline-variant) !important;
+    }
+    .border-b { border-bottom-width: 1px; }
+
+    /* Responsive variants */
+    @media (min-width: 768px) {
+      .md\:gap-stack-lg { gap: var(--stack-lg); }
+      .md\:flex { display: flex; }
+      .md\:hidden { display: none; }
+      .md\:items-end { align-items: flex-end; }
+      .md\:items-center { align-items: center; }
+      .md\:flex-row { flex-direction: row; }
+    }
+
+    body { 
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; 
+      -webkit-font-smoothing: antialiased;
     }
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

@@ -92,7 +92,7 @@
           icon: 'history',
           headerAction: `
             <a href="/admin/users" class="text-xs font-bold text-primary hover:underline flex items-center gap-1 uppercase tracking-wider">
-              View All <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              View All ${ include('components/icon', { name: 'arrow_forward', className: 'w-4 h-4' }) }
             </a>
           `,
           bodyClassName: 'p-0',
@@ -128,7 +128,7 @@
             <div class="grid grid-cols-1 gap-3">
               <a href="/admin/users" class="flex items-center gap-4 p-4 rounded-xl border border-outline-variant hover:bg-surface-container-low hover:border-primary transition-all group">
                 <div class="w-10 h-10 bg-surface-container-high text-on-secondary-container rounded-lg flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
-                  <span class="material-symbols-outlined">person_add</span>
+                  ${ include('components/icon', { name: 'person_add', className: 'w-6 h-6' }) }
                 </div>
                 <div>
                   <h4 class="text-sm font-bold text-on-surface">Manage Users</h4>
@@ -138,7 +138,7 @@
               
               <a href="/admin/profile" class="flex items-center gap-4 p-4 rounded-xl border border-outline-variant hover:bg-surface-container-low hover:border-primary transition-all group">
                 <div class="w-10 h-10 bg-surface-container-high text-on-secondary-container rounded-lg flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
-                  <span class="material-symbols-outlined">settings</span>
+                  ${ include('components/icon', { name: 'settings', className: 'w-6 h-6' }) }
                 </div>
                 <div>
                   <h4 class="text-sm font-bold text-on-surface">Admin Settings</h4>

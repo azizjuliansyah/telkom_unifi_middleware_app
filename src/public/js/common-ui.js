@@ -22,13 +22,17 @@ document.addEventListener('click', function(e) {
     }
 
     if (input) {
-      const icon = toggleBtn.querySelector('span');
+      const iconOn = toggleBtn.querySelector('.icon-on');
+      const iconOff = toggleBtn.querySelector('.icon-off');
+
       if (input.type === 'password') {
         input.type = 'text';
-        if (icon) icon.textContent = 'visibility_off';
+        if (iconOn) iconOn.classList.add('hidden');
+        if (iconOff) iconOff.classList.remove('hidden');
       } else {
         input.type = 'password';
-        if (icon) icon.textContent = 'visibility';
+        if (iconOn) iconOn.classList.remove('hidden');
+        if (iconOff) iconOff.classList.add('hidden');
       }
     }
   }

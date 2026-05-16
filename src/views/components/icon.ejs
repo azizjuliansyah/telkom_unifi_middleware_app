@@ -1,0 +1,13 @@
+<%
+  const _name = locals.name || '';
+  const _className = locals.className || 'w-5 h-5';
+  
+  let _fontSize = 'inherit';
+  if (_className.includes('w-4')) _fontSize = '18px';
+  else if (_className.includes('w-5')) _fontSize = '22px';
+  else if (_className.includes('w-6')) _fontSize = '26px';
+  else if (_className.includes('w-8')) _fontSize = '35px';
+%>
+<span class="material-symbols-outlined flex-shrink-0 <%= _className %>" style="font-size: <%= _fontSize %>; line-height: 1;">
+  <%= _name %>
+</span>
