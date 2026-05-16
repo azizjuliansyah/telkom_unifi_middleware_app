@@ -12,7 +12,7 @@ import adminRoutes from './routes/admin.js'
 import pgSession from 'connect-pg-simple'
 import { pool } from './db/database.js'
 import helmet from 'helmet'
-import { rateLimit } from 'express-rate-limit'
+
 
 const PostgresStore = pgSession(session)
 
@@ -28,60 +28,6 @@ app.set('trust proxy', 1)
 // Initialize database
 await initDatabase()
 
-// Rate limiting
-const generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  limit: 100, // Limit each IP to 100 requests per windowMs
-  standardHeaders: 'draft-7',
-  legacyHeaders: false,
-  message: { success: false, message: 'Terlalu banyak permintaan dari IP ini, silakan coba lagi nanti.' },
-  handler: (req, res, next, options) => {
-    const statusCode = options?.statusCode || 429
-    let errorMsg = 'Terlalu banyak permintaan dari IP ini, silakan coba lagi nanti.'
-    if (options?.message?.message) {
-      errorMsg = options.message.message
-    } else if (typeof options?.message === 'string') {
-      errorMsg = options.message
-    }
-    
-    const responseObj = typeof options?.message === 'object' && options?.message !== null ? options.message : { success: false, message: errorMsg }
-    
-    if ((req.headers.accept && req.headers.accept.includes('application/json')) || req.xhr || req.path.includes('/login') || req.path.includes('/config') || req.path.includes('/health') || req.path.includes('/api')) {
-      return res.status(statusCode).json(responseObj)
-    }
-    res.status(statusCode).render('error', {
-      title: 'Terlalu Banyak Permintaan',
-      message: errorMsg
-    })
-  }
-})
-
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 10, // Stricter limit for login/auth routes
-  standardHeaders: 'draft-7',
-  legacyHeaders: false,
-  message: { success: false, message: 'Terlalu banyak percobaan login, silakan coba lagi dalam 15 menit.' },
-  handler: (req, res, next, options) => {
-    const statusCode = options?.statusCode || 429
-    let errorMsg = 'Terlalu banyak percobaan login, silakan coba lagi dalam 15 menit.'
-    if (options?.message?.message) {
-      errorMsg = options.message.message
-    } else if (typeof options?.message === 'string') {
-      errorMsg = options.message
-    }
-    
-    const responseObj = typeof options?.message === 'object' && options?.message !== null ? options.message : { success: false, message: errorMsg }
-    
-    if ((req.headers.accept && req.headers.accept.includes('application/json')) || req.xhr || req.path.includes('/login') || req.path.includes('/config') || req.path.includes('/health') || req.path.includes('/api')) {
-      return res.status(statusCode).json(responseObj)
-    }
-    res.status(statusCode).render('error', {
-      title: 'Akses Dibatasi',
-      message: errorMsg
-    })
-  }
-})
 
 // Middleware (urutan penting)
 app.use(helmet({
@@ -94,7 +40,7 @@ app.use(helmet({
     },
   },
 }))
-app.use(generalLimiter)
+
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -122,7 +68,7 @@ app.set('views', join(__dirname, 'views'))
 
 
 // Mount routes
-app.use('/guest', authLimiter, authRoutes)
+app.use('/guest', authRoutes)
 app.use('/admin', adminRoutes)
 
 // Health check
